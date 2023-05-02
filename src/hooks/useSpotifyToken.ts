@@ -18,8 +18,8 @@ const generateRandomString = (length: number) => {
 };
 
 const generateCodeChallenge = async (codeVerifier: string | undefined) => {
-	const base64encode = (string: ArrayBuffer | Iterable<number>) =>
-		btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
+	const base64encode = (string: ArrayBuffer) =>
+		btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(string))))
 			.replace(/\+/g, '-')
 			.replace(/\//g, '_')
 			.replace(/=+$/, '');
@@ -82,7 +82,7 @@ const useSpotifyToken = () => {
 				code_challenge: codeChallenge
 			});
 
-			window.location = 'https://accounts.spotify.com/authorize?' + args;
+			window.location.href = `https://accounts.spotify.com/authorize?${args}`;
 		});
 	}, []);
 
