@@ -76,7 +76,7 @@ const useSpotifyToken = () => {
 				response_type: 'code',
 				client_id: import.meta.env.VITE_CLIENT_ID,
 				scope,
-				redirect_uri: 'http://localhost:8080/',
+				redirect_uri: 'https://music-lib.vercel.app/',
 				state,
 				code_challenge_method: 'S256',
 				code_challenge: codeChallenge
