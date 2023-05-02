@@ -1,28 +1,56 @@
 {
-  "name": "musiclib",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
-    "@vitejs/plugin-react": "^4.0.0",
-    "eslint": "^8.38.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.3.4",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.2"
-  }
+	"name": "pv247-assignment",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.10.4",
+		"@emotion/styled": "^11.10.4",
+		"@mui/icons-material": "^5.10.9",
+		"@mui/material": "^5.11.14",
+		"@tanstack/react-query": "^4.29.5",
+		"@tanstack/react-router": "^0.0.1-beta.83",
+		"firebase": "^9.19.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-flagkit": "^2.0.4",
+		"request": "^2.88.2",
+		"spotify-web-api-node": "^5.0.2"
+	},
+	"devDependencies": {
+		"@haaxor1689/eslint-config": "^2.0.5",
+		"@haaxor1689/prettier-config": "^2.0.2",
+		"@types/react": "^18.0.27",
+		"@types/react-dom": "^18.0.10",
+		"@types/request": "^2.48.8",
+		"@types/spotify-web-api-node": "^5.0.7",
+		"@typescript-eslint/eslint-plugin": "^5.52.0",
+		"@typescript-eslint/parser": "^5.52.0",
+		"@vitejs/plugin-react": "^3.1.0",
+		"eslint": "^8.34.0",
+		"eslint-config-prettier": "^8.6.0",
+		"eslint-import-resolver-typescript": "^3.5.3",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-prefer-arrow": "^1.2.3",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.32.2",
+		"prettier": "^2.8.4",
+		"typescript": "^4.9.5",
+		"vite": "^4.1.0",
+		"vite-plugin-svgr": "^2.4.0"
+	},
+	"eslintConfig": {
+		"extends": "@haaxor1689/eslint-config"
+	},
+	"prettier": "@haaxor1689/prettier-config",
+	"engines": {
+		"node": ">=18.14.0",
+		"npm": ">=9.3.0"
+	}
 }
