@@ -1,5 +1,5 @@
 import {
-	AppBar,
+	AppBar, Box,
 	Container,
 	CssBaseline,
 	ThemeProvider,
@@ -17,6 +17,7 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import theme from './theme';
 import ButtonLink from './components/ButtonLink';
+import SpotifyLogin from "./components/SpotifyLogin";
 
 const rootRoute = new RootRoute({
 	component: () => (
@@ -27,6 +28,8 @@ const rootRoute = new RootRoute({
 				<Container maxWidth="md">
 					<Toolbar disableGutters sx={{ gap: 2 }}>
 						<ButtonLink to="/">Home</ButtonLink>
+						<Box sx={{ flexGrow: 1 }} />
+						<SpotifyLogin />
 					</Toolbar>
 				</Container>
 			</AppBar>
@@ -62,10 +65,7 @@ const notFoundRoute = new Route({
 	component: NotFound
 });
 
-const routeTree = rootRoute.addChildren([
-	indexRoute,
-	notFoundRoute
-]);
+const routeTree = rootRoute.addChildren([indexRoute, notFoundRoute]);
 
 const router = new Router({ routeTree });
 

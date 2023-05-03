@@ -1,16 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { FC } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
-import useSpotifyToken from '../hooks/useSpotifyToken';
 
-const Home = () => {
+const Home: FC = () => {
 	usePageTitle('Home');
-
-	const token = useSpotifyToken();
-	useEffect(() => {
-
-	}, []);
 
 	return (
 		<Box
@@ -22,8 +16,6 @@ const Home = () => {
 			<Typography variant="h4" fontWeight="bolder">
 				{/*{token ?? 'undefined'}*/}
 			</Typography>
-			{/*<Typography variant="h4">{client_id}</Typography>*/}
-			{/*<Typography variant="h4">{client_secret}</Typography>*/}
 		</Box>
 	);
 };
