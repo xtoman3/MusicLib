@@ -17,7 +17,6 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import theme from './theme';
 import ButtonLink from './components/ButtonLink';
-import SpotifyLogin from "./components/SpotifyLogin";
 
 const rootRoute = new RootRoute({
 	component: () => (
@@ -29,7 +28,6 @@ const rootRoute = new RootRoute({
 					<Toolbar disableGutters sx={{ gap: 2 }}>
 						<ButtonLink to="/">Home</ButtonLink>
 						<Box sx={{ flexGrow: 1 }} />
-						<SpotifyLogin />
 					</Toolbar>
 				</Container>
 			</AppBar>

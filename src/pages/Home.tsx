@@ -13,9 +13,6 @@ const Home: FC = () => {
 			<Typography variant="h2" fontWeight="bolder">
 				Test
 			</Typography>
-			<Typography variant="h4" fontWeight="bolder">
-				{/*{token ?? 'undefined'}*/}
-			</Typography>
 		</Box>
 	);
 };
