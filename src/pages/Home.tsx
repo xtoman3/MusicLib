@@ -1,10 +1,21 @@
 import { Box, Typography } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
+import { useSpotifyApi } from '../hooks/useApi';
 
 const Home: FC = () => {
 	usePageTitle('Home');
+	const [spotifyApi] = useSpotifyApi();
+
+	useEffect(() => {
+		if (spotifyApi) {
+			spotifyApi.getMe().then(data => {
+				// setMeData(data.body);
+				console.log(data);
+			});
+		}
+	}, []);
 
 	return (
 		<Box
@@ -14,7 +25,7 @@ const Home: FC = () => {
 				Test
 			</Typography>
 			<Typography variant="h4" fontWeight="bolder">
-				{/*{token ?? 'undefined'}*/}
+				{/*{meData}*/}
 			</Typography>
 		</Box>
 	);

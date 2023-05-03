@@ -1,5 +1,6 @@
 import {
-	AppBar, Box,
+	AppBar,
+	Box,
 	Container,
 	CssBaseline,
 	ThemeProvider,
@@ -17,7 +18,8 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import theme from './theme';
 import ButtonLink from './components/ButtonLink';
-import SpotifyLogin from "./components/SpotifyLogin";
+import SpotifyLogin from './components/SpotifyLogin';
+import { ApiProvider } from './hooks/useApi';
 
 const rootRoute = new RootRoute({
 	component: () => (
@@ -76,6 +78,10 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-const App = () => <RouterProvider router={router} />;
+const App = () => (
+	<ApiProvider>
+		<RouterProvider router={router} />
+	</ApiProvider>
+);
 
 export default App;

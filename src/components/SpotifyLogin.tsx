@@ -1,5 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Button } from '@mui/material';
+import {useSpotifyApi} from "../hooks/useApi";
+import SpotifyWebApi from "spotify-web-api-node";
 
 const generateRandomString = (length: number) => {
 	let text = '';
@@ -54,7 +56,7 @@ const retrieveAccessToken = () => {
 	const code = urlParams.get('code');
 	const codeVerifier = localStorage.getItem('code_verifier');
 
-	if (!code || !codeVerifier) return;
+	if (localStorage.getItem('access_token') || !code || !codeVerifier) return;
 
 	const body = new URLSearchParams({
 		grant_type: 'authorization_code',
@@ -79,9 +81,6 @@ const retrieveAccessToken = () => {
 		})
 		.then(data => {
 			localStorage.setItem('access_token', data.access_token);
-		})
-		.catch(error => {
-			console.error('Error:', error);
 		});
 };
 
