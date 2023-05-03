@@ -3,8 +3,8 @@ import { FC } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 
-const Home: FC = () => {
-	usePageTitle('Home');
+const Albums: FC = () => {
+	usePageTitle('Albums');
 
 	return (
 		<Box
@@ -17,4 +17,4 @@ const Home: FC = () => {
 	);
 };
 
-export default Home;
+export default Albums;

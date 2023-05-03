@@ -1,0 +1,68 @@
+import { initializeApp } from 'firebase/app';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signOut as authSignOut,
+	onAuthStateChanged,
+	User
+} from 'firebase/auth';
+import {
+	collection,
+	CollectionReference,
+	doc,
+	DocumentReference,
+	getFirestore
+} from 'firebase/firestore';
+
+// Initialize Firebase
+initializeApp({
+	apiKey: 'AIzaSyDfJJZAVycT-RDdf3pCxfTYpICV_SPjDBY',
+	authDomain: 'musiclab-4f1ca.firebaseapp.com',
+	projectId: 'musiclab-4f1ca',
+	storageBucket: 'musiclab-4f1ca.appspot.com',
+	messagingSenderId: '948245125555',
+	appId: '1:948245125555:web:eeb0f04e0712e092f493c6'
+});
+
+// Authentication
+const auth = getAuth();
+
+// Sign up handler
+export const signUp = (email: string, password: string) =>
+	createUserWithEmailAndPassword(auth, email, password);
+
+// Sign in handler
+export const signIn = (email: string, password: string) =>
+	signInWithEmailAndPassword(auth, email, password);
+
+// Sign out handler
+export const signOut = () => authSignOut(auth);
+
+// Subscribe to auth state changes
+export const onAuthChanged = (callback: (u: User | null) => void) =>
+	onAuthStateChanged(auth, callback);
+
+// Firestore
+const db = getFirestore();
+
+export type Album = {
+	name: string;
+	by: string;
+	rating: number;
+	genres: string[];
+};
+
+export type Artist = {
+	name: string;
+	genres: string[];
+	rating: number;
+};
+
+export const albumsCollection = collection(
+	db,
+	'albums'
+) as CollectionReference<Album>;
+
+export const albumsDocument = (id: string) =>
+	doc(db, 'albums', id) as DocumentReference<Album>;
