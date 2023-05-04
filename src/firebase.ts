@@ -53,10 +53,8 @@ export const onAuthChanged = (callback: (u: User | null) => void) =>
 const db = getFirestore();
 
 export type Album = {
-	name: string;
-	by: string;
-	rating: number;
-	genres: string[];
+	id: string;
+	artists: string[];
 };
 
 export type Artist = {

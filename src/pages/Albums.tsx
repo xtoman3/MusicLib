@@ -1,8 +1,9 @@
-import { Box, Paper, TextField, Typography } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import React, { FC, FormEvent, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
+import AlbumPreview from '../components/AlbumPreview';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
@@ -51,29 +52,7 @@ const Albums: FC = () => {
 				}}
 			>
 				{albums?.map(album => (
-					<Paper
-						key={album.id}
-						sx={{
-							p: 2,
-							m: 1,
-							maxWidth: 250,
-							display: 'flex',
-							flexDirection: 'column'
-						}}
-					>
-						<Typography
-							variant="h6"
-							sx={{
-								overflow: 'hidden',
-								whiteSpace: 'nowrap',
-								textOverflow: 'ellipsis'
-							}}
-						>
-							{album.name}
-						</Typography>
-						<Typography variant="subtitle1">{album.artists[0].name}</Typography>
-						<img src={album.images[0].url} alt={album.name} />
-					</Paper>
+					<AlbumPreview key={album.id} album={album} />
 				))}
 			</Box>
 		</>
