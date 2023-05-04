@@ -11,7 +11,7 @@ type AlbumImage = {
 	url: string;
 };
 
-type AlbumPreview = {
+export type AlbumPreviewType = {
 	id: string;
 	name: string;
 	artists: AlbumArtist[];
@@ -21,7 +21,7 @@ type AlbumPreview = {
 };
 
 type Props = {
-	album: AlbumPreview;
+	album: AlbumPreviewType;
 };
 
 const AlbumPreview: FC<Props> = ({ album }) => (

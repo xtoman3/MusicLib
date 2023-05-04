@@ -1,9 +1,9 @@
 import { Box, TextField } from '@mui/material';
-import React, { FC, FormEvent, useState } from 'react';
+import React, {FC, FormEvent, useEffect, useState} from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
-import AlbumPreview from '../components/AlbumPreview';
+import AlbumPreview, { AlbumPreviewType } from '../components/AlbumPreviewType';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
@@ -11,25 +11,29 @@ const Albums: FC = () => {
 
 	const [search, setSearch] = useState<string>('');
 
-	const [albums, setAlbums] = useState<any[] | undefined>([]);
+	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
 
-	const searchAlbums = (e: FormEvent) => {
-		e.preventDefault();
+	const searchAlbums = () => {
 		spotifyApi
 			?.searchAlbums(search)
 			.then(response => {
-				console.log(response);
-				setAlbums(response.body.albums?.items);
+				setAlbums(response.body.albums?.items as AlbumPreviewType[]);
 			})
-			.catch(error => console.log(error));
+			.catch(error => alert(error));
 	};
+
+	useEffect(() => {
+		if (search.length === 0) {
+			setAlbums(undefined);
+		} else searchAlbums();
+	}, [search]);
 
 	return (
 		<>
 			<Box
 				component="form"
 				maxWidth="sm"
-				onSubmit={searchAlbums}
+				onSubmit={e => e.preventDefault()}
 				sx={{ width: '100%' }}
 			>
 				<TextField
