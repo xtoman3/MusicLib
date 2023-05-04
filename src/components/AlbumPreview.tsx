@@ -1,4 +1,6 @@
-import { Paper, Typography } from '@mui/material';
+import { IconButton, Paper, Typography } from '@mui/material';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import React, { FC } from 'react';
 
 type AlbumArtist = {
@@ -30,9 +32,10 @@ const AlbumPreview: FC<Props> = ({ album }) => (
 		sx={{
 			p: 2,
 			m: 1,
-			maxWidth: 250,
+			maxWidth: 230,
 			display: 'flex',
-			flexDirection: 'column'
+			flexDirection: 'column',
+			position: 'relative'
 		}}
 	>
 		<Typography
@@ -45,8 +48,33 @@ const AlbumPreview: FC<Props> = ({ album }) => (
 		>
 			{album.name}
 		</Typography>
-		<Typography variant="subtitle1">{album.artists[0].name}</Typography>
+		<Typography
+			variant="subtitle1"
+			sx={{
+				overflow: 'hidden',
+				whiteSpace: 'nowrap',
+				textOverflow: 'ellipsis'
+			}}
+		>
+			by {album.artists[0].name}
+		</Typography>
 		<img src={album.images[1].url} alt={album.name} />
+		<IconButton
+			sx={{
+				'position': 'absolute',
+				'bottom': 12,
+				'right': 12,
+				'backgroundColor': 'primary.main',
+				'opacity': 0.7,
+				'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
+				'&:hover': {
+					backgroundColor: 'primary.main',
+					opacity: 1
+				}
+			}}
+		>
+			<FavoriteBorderRoundedIcon />
+		</IconButton>
 	</Paper>
 );
 
