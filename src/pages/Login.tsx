@@ -1,10 +1,11 @@
-import { Button, Paper, Typography, TextField, Box } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 
 import useField from '../hooks/useField';
 import usePageTitle from '../hooks/usePageTitle';
 import { signIn, signUp } from '../firebase';
+import SignInWithGoogleButton from '../components/SignInWithGoogleButton';
 
 const Login = () => {
 	usePageTitle('Login');
@@ -80,6 +81,7 @@ const Login = () => {
 					Sign in
 				</Button>
 			</Box>
+			<SignInWithGoogleButton />
 		</Paper>
 	);
 };

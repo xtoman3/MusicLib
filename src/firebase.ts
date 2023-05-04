@@ -5,7 +5,9 @@ import {
 	signInWithEmailAndPassword,
 	signOut as authSignOut,
 	onAuthStateChanged,
-	User
+	User,
+	GoogleAuthProvider,
+	signInWithPopup
 } from 'firebase/auth';
 import {
 	collection,
@@ -28,6 +30,8 @@ initializeApp({
 // Authentication
 const auth = getAuth();
 
+const provider = new GoogleAuthProvider();
+
 // Sign up handler
 export const signUp = (email: string, password: string) =>
 	createUserWithEmailAndPassword(auth, email, password);
@@ -35,6 +39,8 @@ export const signUp = (email: string, password: string) =>
 // Sign in handler
 export const signIn = (email: string, password: string) =>
 	signInWithEmailAndPassword(auth, email, password);
+
+export const signInWithGoogle = () => signInWithPopup(auth, provider);
 
 // Sign out handler
 export const signOut = () => authSignOut(auth);
