@@ -22,7 +22,7 @@ import ButtonLink from './components/ButtonLink';
 import { useLoggedInUser, UserProvider } from './hooks/useLoggedInUser';
 import Login from './pages/Login';
 import { signOut } from './firebase';
-import {SpotifyApiProvider} from "./hooks/useSpotifyApi";
+import { SpotifyApiProvider } from './hooks/useSpotifyApi';
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -47,13 +47,14 @@ const rootRoute = new RootRoute({
 				</AppBar>
 
 				<Container
-					maxWidth="sm"
+					maxWidth="lg"
 					component="main"
 					sx={{
 						display: 'flex',
 						flexDirection: 'column',
-						justifyContent: 'center',
+						justifyContent: 'flex-start',
 						alignItems: 'center',
+						alignContent: 'flex-start',
 						flexGrow: 1,
 						gap: 2,
 						my: 4

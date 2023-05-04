@@ -19,6 +19,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-flagkit": "^2.0.4",
+		"react-router-dom": "^6.11.1",
 		"request": "^2.88.2",
 		"spotify-web-api-node": "^5.0.2"
 	},
