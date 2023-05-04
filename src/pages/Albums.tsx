@@ -1,9 +1,9 @@
 import { Box, TextField } from '@mui/material';
-import React, {FC, FormEvent, useEffect, useState} from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
-import AlbumPreview, { AlbumPreviewType } from '../components/AlbumPreviewType';
+import AlbumPreview, { AlbumPreviewType } from '../components/AlbumPreview';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
