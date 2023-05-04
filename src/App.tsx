@@ -22,6 +22,7 @@ import ButtonLink from './components/ButtonLink';
 import { useLoggedInUser, UserProvider } from './hooks/useLoggedInUser';
 import Login from './pages/Login';
 import { signOut } from './firebase';
+import {SpotifyApiProvider} from "./hooks/useSpotifyApi";
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -99,9 +100,11 @@ declare module '@tanstack/react-router' {
 }
 
 const App = () => (
-	<UserProvider>
-		<RouterProvider router={router} />
-	</UserProvider>
+	<SpotifyApiProvider>
+		<UserProvider>
+			<RouterProvider router={router} />
+		</UserProvider>
+	</SpotifyApiProvider>
 );
 
 export default App;
