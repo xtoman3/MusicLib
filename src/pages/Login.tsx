@@ -39,6 +39,7 @@ const Login = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				width: '100%',
+				maxWidth: 'sm',
 				p: 4,
 				gap: 2
 			}}

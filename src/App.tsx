@@ -15,7 +15,6 @@ import {
 	RouterProvider
 } from '@tanstack/react-router';
 
-import Albums from './pages/Albums';
 import NotFound from './pages/NotFound';
 import theme from './theme';
 import ButtonLink from './components/ButtonLink';
@@ -23,6 +22,8 @@ import { useLoggedInUser, UserProvider } from './hooks/useLoggedInUser';
 import Login from './pages/Login';
 import { signOut } from './firebase';
 import { SpotifyApiProvider } from './hooks/useSpotifyApi';
+import Search from './pages/Search';
+import Albums from './pages/Albums';
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -36,6 +37,7 @@ const rootRoute = new RootRoute({
 					<Container maxWidth="md">
 						<Toolbar disableGutters sx={{ gap: 2 }}>
 							<ButtonLink to="/">Albums</ButtonLink>
+							<ButtonLink to="/search">Search</ButtonLink>
 							<Box sx={{ flexGrow: 1 }} />
 							{!user ? (
 								<ButtonLink to="/login">Login</ButtonLink>
@@ -73,6 +75,12 @@ const indexRoute = new Route({
 	component: Albums
 });
 
+const searchRoute = new Route({
+	getParentRoute: () => rootRoute,
+	path: '/search',
+	component: Search
+});
+
 const loginRoute = new Route({
 	getParentRoute: () => rootRoute,
 	path: '/login',
@@ -87,6 +95,7 @@ const notFoundRoute = new Route({
 
 const routeTree = rootRoute.addChildren([
 	indexRoute,
+	searchRoute,
 	loginRoute,
 	notFoundRoute
 ]);

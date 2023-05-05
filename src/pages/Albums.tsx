@@ -1,65 +1,32 @@
-import { Box, TextField } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+import { Paper } from '@mui/material';
+import {FC, useState} from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
-import { useSpotifyApi } from '../hooks/useSpotifyApi';
-import AlbumPreview, { AlbumPreviewType } from '../components/AlbumPreview';
+import {useSpotifyApi} from "../hooks/useSpotifyApi";
+import {AlbumPreviewType} from "../utils/AlbumUtils";
+import {useLoggedInUser} from "../hooks/useLoggedInUser";
+import {AlbumFirebase, albumsCollection} from "../firebase";
+import { getDocs } from 'firebase/firestore';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
+	const user = useLoggedInUser();
 	const spotifyApi = useSpotifyApi();
-
-	const [search, setSearch] = useState<string>('');
 
 	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
 
-	const searchAlbums = () => {
-		spotifyApi
-			?.searchAlbums(search)
-			.then(response => {
-				setAlbums(response.body.albums?.items as AlbumPreviewType[]);
-			})
-			.catch(error => alert(error));
-	};
-
-	useEffect(() => {
-		if (search.length === 0) {
-			setAlbums(undefined);
-		} else searchAlbums();
-	}, [search]);
+	// const getSavedAlbums = async () => {
+	// 	const albumQuery = await getDocs(albumsCollection);
+	// 	const retrievedAlbums: AlbumFirebase[] = [];
+	// 	albumQuery.forEach(doc => retrievedAlbums.push(doc.data()));
+	//
+	//
+	// }
 
 	return (
-		<>
-			<Box
-				component="form"
-				maxWidth="sm"
-				onSubmit={e => e.preventDefault()}
-				sx={{ width: '100%' }}
-			>
-				<TextField
-					id="query"
-					label="Search albums"
-					fullWidth
-					variant="standard"
-					value={search}
-					onChange={e => setSearch(e.target.value)}
-				/>
-			</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'wrap',
-					justifyContent: 'center',
-					alignItems: 'flex-start',
-					alignContent: 'flex-start'
-				}}
-			>
-				{albums?.map(album => (
-					<AlbumPreview key={album.id} album={album} />
-				))}
-			</Box>
-		</>
+		<Paper>
+
+		</Paper>
 	);
 };
 
