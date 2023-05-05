@@ -1,18 +1,30 @@
 import { Box, TextField } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
+import { getDoc } from 'firebase/firestore';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import AlbumPreview from '../components/AlbumPreview';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
+import { albumsDocument } from '../firebase';
+import { useLoggedInUser } from '../hooks/useLoggedInUser';
 
 const Search: FC = () => {
 	usePageTitle('Search');
+	const user = useLoggedInUser();
 	const spotifyApi = useSpotifyApi();
 
 	const [search, setSearch] = useState<string>('');
 
 	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
+	const [savedAlbumIds, setSavedAlbumIds] = useState<string[]>([]);
+
+	const getSavedAlbums = async () => {
+		if (!user || !spotifyApi) return;
+		const docSnap = await getDoc(albumsDocument(user.uid));
+		const albumIds = docSnap.data()?.ids;
+		if (albumIds) setSavedAlbumIds(albumIds);
+	};
 
 	const searchAlbums = () => {
 		spotifyApi
@@ -28,6 +40,10 @@ const Search: FC = () => {
 			setAlbums(undefined);
 		} else searchAlbums();
 	}, [search]);
+
+	useEffect(() => {
+		getSavedAlbums();
+	}, []);
 
 	return (
 		<>
@@ -57,7 +73,11 @@ const Search: FC = () => {
 				}}
 			>
 				{albums?.map(album => (
-					<AlbumPreview key={album.id} album={album} />
+					<AlbumPreview
+						key={album.id}
+						album={album}
+						saved={savedAlbumIds.includes(album.id)}
+					/>
 				))}
 			</Box>
 		</>

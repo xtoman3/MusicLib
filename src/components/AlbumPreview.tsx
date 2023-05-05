@@ -1,8 +1,9 @@
 import { IconButton, Paper, Typography } from '@mui/material';
-import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
 import React, { FC } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import {arrayUnion, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { albumsDocument } from '../firebase';
@@ -10,15 +11,26 @@ import { AlbumPreviewType } from '../utils/AlbumUtils';
 
 type Props = {
 	album: AlbumPreviewType;
+	saved: boolean;
 };
 
-const AlbumPreview: FC<Props> = ({ album }) => {
+const AlbumPreview: FC<Props> = ({ album, saved }) => {
 	const user = useLoggedInUser();
 	const navigate = useNavigate();
 
 	const handleSubmit = async () => {
 		if (!user) navigate({ to: '/login' });
-		else await updateDoc(albumsDocument(user.uid), { ids: arrayUnion(album.id) });
+		else {
+			if (!saved)
+				await updateDoc(albumsDocument(user.uid), {
+					ids: arrayUnion(album.id)
+				});
+			else
+				await updateDoc(albumsDocument(user.uid), {
+					ids: arrayRemove(album.id)
+				});
+			saved = !saved;
+		}
 	};
 
 	return (
@@ -71,7 +83,7 @@ const AlbumPreview: FC<Props> = ({ album }) => {
 					}
 				}}
 			>
-				<FavoriteBorderRoundedIcon />
+				{saved ? <ClearIcon /> : <AddIcon />}
 			</IconButton>
 		</Paper>
 	);
