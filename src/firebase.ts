@@ -54,6 +54,7 @@ const db = getFirestore();
 
 export type SavedAlbums = {
 	ids: string[];
+	ratings: Map<string, number>;
 };
 
 export type ArtistFirebase = {

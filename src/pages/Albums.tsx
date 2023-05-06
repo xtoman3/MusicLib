@@ -16,11 +16,16 @@ const Albums: FC = () => {
 
 	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
 	const [savedAlbumIds, setSavedAlbumIds] = useState<string[]>([]);
+	const [ratings, setRatings] = useState<Map<string, number>>(
+		new Map<string, number>()
+	);
 
 	useEffect(() => {
 		if (!user) return;
 		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
-			setSavedAlbumIds(doc.data()?.ids ?? []);
+			const data = doc.data();
+			setSavedAlbumIds(data?.ids ?? []);
+			setRatings(new Map<string, number>(Object.entries(data?.ratings ?? {})));
 		});
 
 		return () => {
@@ -53,6 +58,7 @@ const Albums: FC = () => {
 				<AlbumPreview
 					key={album.id}
 					album={album}
+					rating={ratings.get(album.id) ?? 0}
 					saved={savedAlbumIds.includes(album.id)}
 				/>
 			))}

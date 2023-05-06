@@ -13,10 +13,11 @@ import RatingStrip from './RatingStrip';
 
 type Props = {
 	album: AlbumPreviewType;
+	rating: number;
 	saved: boolean;
 };
 
-const AlbumPreview: FC<Props> = ({ album, saved }) => {
+const AlbumPreview: FC<Props> = ({ album, rating, saved }) => {
 	const user = useLoggedInUser();
 	const navigate = useNavigate();
 
@@ -93,7 +94,7 @@ const AlbumPreview: FC<Props> = ({ album, saved }) => {
 				by {album.artists[0].name}
 			</Typography>
 			<img src={album.images[1].url} alt={album.name} />
-			<RatingStrip initStars={4} />
+			<RatingStrip albumId={album.id} initStars={rating} />
 		</Paper>
 	);
 };
