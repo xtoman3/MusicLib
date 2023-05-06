@@ -1,6 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
-import { getDoc } from 'firebase/firestore';
+import { getDoc, onSnapshot } from 'firebase/firestore';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
@@ -19,13 +19,6 @@ const Search: FC = () => {
 	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
 	const [savedAlbumIds, setSavedAlbumIds] = useState<string[]>([]);
 
-	const getSavedAlbums = async () => {
-		if (!user || !spotifyApi) return;
-		const docSnap = await getDoc(albumsDocument(user.uid));
-		const albumIds = docSnap.data()?.ids;
-		if (albumIds) setSavedAlbumIds(albumIds);
-	};
-
 	const searchAlbums = () => {
 		spotifyApi
 			?.searchAlbums(search)
@@ -42,7 +35,14 @@ const Search: FC = () => {
 	}, [search]);
 
 	useEffect(() => {
-		getSavedAlbums();
+		if (!user) return;
+		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
+			setSavedAlbumIds(doc.data()?.ids ?? []);
+		});
+
+		return () => {
+			unsubscribe();
+		};
 	}, []);
 
 	return (

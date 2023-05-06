@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
-import { getDoc } from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
@@ -17,25 +17,26 @@ const Albums: FC = () => {
 	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
 	const [savedAlbumIds, setSavedAlbumIds] = useState<string[]>([]);
 
-	const getSavedAlbums = async () => {
-		if (!user || !spotifyApi) return;
-		const docSnap = await getDoc(albumsDocument(user.uid));
-		const userAlbums = docSnap.data();
-		if (!userAlbums) return;
-		setSavedAlbumIds(userAlbums.ids);
+	useEffect(() => {
+		if (!user) return;
+		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
+			setSavedAlbumIds(doc.data()?.ids ?? []);
+		});
 
+		return () => {
+			unsubscribe();
+		};
+	}, []);
+
+	useEffect(() => {
+		if (!spotifyApi || savedAlbumIds.length === 0) return;
 		spotifyApi
-			.getAlbums(userAlbums.ids)
+			.getAlbums(savedAlbumIds)
 			.then(response => {
-				console.log(response);
 				setAlbums(response.body.albums as AlbumPreviewType[]);
 			})
 			.catch(error => alert(error));
-	};
-
-	useEffect(() => {
-		getSavedAlbums();
-	}, []);
+	}, [savedAlbumIds]);
 
 	return (
 		<Box

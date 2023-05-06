@@ -1,7 +1,7 @@
-import { IconButton, Paper, Typography } from '@mui/material';
+import {Card, IconButton, Paper, Typography} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import React, { FC } from 'react';
+import React, {FC, useMemo, useState} from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 
@@ -29,7 +29,6 @@ const AlbumPreview: FC<Props> = ({ album, saved }) => {
 				await updateDoc(albumsDocument(user.uid), {
 					ids: arrayRemove(album.id)
 				});
-			saved = !saved;
 		}
 	};
 

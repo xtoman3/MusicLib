@@ -52,7 +52,7 @@ export const onAuthChanged = (callback: (u: User | null) => void) =>
 // Firestore
 const db = getFirestore();
 
-export type AlbumFirebase = {
+export type SavedAlbums = {
 	ids: string[];
 };
 
@@ -63,7 +63,7 @@ export type ArtistFirebase = {
 export const albumsCollection = collection(
 	db,
 	'albums'
-) as CollectionReference<AlbumFirebase>;
+) as CollectionReference<SavedAlbums>;
 
 export const albumsDocument = (id: string) =>
-	doc(db, 'albums', id) as DocumentReference<AlbumFirebase>;
+	doc(db, 'albums', id) as DocumentReference<SavedAlbums>;
