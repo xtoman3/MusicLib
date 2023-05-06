@@ -60,6 +60,7 @@ const Albums: FC = () => {
 					album={album}
 					rating={ratings.get(album.id) ?? 0}
 					saved={savedAlbumIds.includes(album.id)}
+					showRating
 				/>
 			))}
 		</Box>
