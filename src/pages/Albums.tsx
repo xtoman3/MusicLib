@@ -1,37 +1,21 @@
 import { Box } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
-import { onSnapshot } from 'firebase/firestore';
+import React, { FC, useEffect } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
-import { useLoggedInUser } from '../hooks/useLoggedInUser';
-import { albumsDocument } from '../firebase';
 import AlbumPreview from '../components/AlbumPreview';
+import { useSavedAlbums } from '../hooks/useSavedAlbums';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
-	const user = useLoggedInUser();
 	const spotifyApi = useSpotifyApi();
 
-	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
-	const [savedAlbumIds, setSavedAlbumIds] = useState<string[]>([]);
-	const [ratings, setRatings] = useState<Map<string, number>>(
-		new Map<string, number>()
-	);
-
-	useEffect(() => {
-		if (!user) return;
-		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
-			const data = doc.data();
-			setSavedAlbumIds(data?.ids ?? []);
-			setRatings(new Map<string, number>(Object.entries(data?.ratings ?? {})));
-		});
-
-		return () => {
-			unsubscribe();
-		};
-	}, []);
+	const {
+		albums: { albums, setAlbums },
+		ids: { ids: savedAlbumIds },
+		ratings: { ratings }
+	} = useSavedAlbums();
 
 	useEffect(() => {
 		if (!spotifyApi || savedAlbumIds.length === 0) return;

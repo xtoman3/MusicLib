@@ -1,23 +1,21 @@
-import { Box, TextField } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
-import { getDoc, onSnapshot } from 'firebase/firestore';
+import {Box, TextField} from '@mui/material';
+import React, {FC, useEffect, useState} from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
-import { useSpotifyApi } from '../hooks/useSpotifyApi';
+import {useSpotifyApi} from '../hooks/useSpotifyApi';
 import AlbumPreview from '../components/AlbumPreview';
-import { AlbumPreviewType } from '../utils/AlbumUtils';
-import { albumsDocument } from '../firebase';
-import { useLoggedInUser } from '../hooks/useLoggedInUser';
+import {AlbumPreviewType} from '../utils/AlbumUtils';
+import {useSavedAlbums} from '../hooks/useSavedAlbums';
 
 const Search: FC = () => {
 	usePageTitle('Search');
-	const user = useLoggedInUser();
 	const spotifyApi = useSpotifyApi();
+	const {
+		albums: { albums, setAlbums },
+		ids: { ids: savedAlbumIds }
+	} = useSavedAlbums();
 
 	const [search, setSearch] = useState<string>('');
-
-	const [albums, setAlbums] = useState<AlbumPreviewType[] | undefined>([]);
-	const [savedAlbumIds, setSavedAlbumIds] = useState<string[]>([]);
 
 	const searchAlbums = () => {
 		spotifyApi
@@ -30,20 +28,9 @@ const Search: FC = () => {
 
 	useEffect(() => {
 		if (search.length === 0) {
-			setAlbums(undefined);
+			setAlbums([]);
 		} else searchAlbums();
 	}, [search]);
-
-	useEffect(() => {
-		if (!user) return;
-		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
-			setSavedAlbumIds(doc.data()?.ids ?? []);
-		});
-
-		return () => {
-			unsubscribe();
-		};
-	}, []);
 
 	return (
 		<>

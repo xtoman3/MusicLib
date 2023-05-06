@@ -24,6 +24,7 @@ import { signOut } from './firebase';
 import { SpotifyApiProvider } from './hooks/useSpotifyApi';
 import Search from './pages/Search';
 import Albums from './pages/Albums';
+import { SavedAlbumsProvider } from './hooks/useSavedAlbums';
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -62,7 +63,9 @@ const rootRoute = new RootRoute({
 						my: 4
 					}}
 				>
-					<Outlet />
+					<SavedAlbumsProvider>
+						<Outlet />
+					</SavedAlbumsProvider>
 				</Container>
 			</ThemeProvider>
 		);
