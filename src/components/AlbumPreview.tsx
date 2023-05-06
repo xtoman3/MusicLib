@@ -1,13 +1,15 @@
-import {Card, IconButton, Paper, Typography} from '@mui/material';
+import { Box, Card, IconButton, Paper, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import React, {FC, useMemo, useState} from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { albumsDocument } from '../firebase';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
+
+import RatingStrip from './RatingStrip';
 
 type Props = {
 	album: AlbumPreviewType;
@@ -38,23 +40,47 @@ const AlbumPreview: FC<Props> = ({ album, saved }) => {
 			sx={{
 				p: 2,
 				m: 1,
-				maxWidth: 230,
+				maxWidth: 250,
 				display: 'flex',
-				flexDirection: 'column',
-				position: 'relative'
+				flexDirection: 'column'
 			}}
 		>
-			<Typography
-				variant="h6"
-				title={album.name}
+			<Box
 				sx={{
-					overflow: 'hidden',
-					whiteSpace: 'nowrap',
-					textOverflow: 'ellipsis'
+					display: 'flex',
+					flexDirection: 'row'
 				}}
 			>
-				{album.name}
-			</Typography>
+				<Typography
+					variant="h6"
+					title={album.name}
+					sx={{
+						overflow: 'hidden',
+						whiteSpace: 'nowrap',
+						textOverflow: 'ellipsis'
+					}}
+				>
+					{album.name}
+				</Typography>
+				<Box sx={{ flexGrow: 1 }} />
+				<IconButton
+					onClick={handleSubmit}
+					size="small"
+					sx={{
+						'marginLeft': 1,
+						'backgroundColor': 'primary.main',
+						'opacity': 1,
+						'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
+						'&:hover': {
+							backgroundColor: 'primary.dark',
+							opacity: 1
+						}
+					}}
+				>
+					{saved ? <ClearIcon /> : <AddIcon />}
+				</IconButton>
+			</Box>
+
 			<Typography
 				variant="subtitle1"
 				title={album.artists[0].name}
@@ -67,23 +93,7 @@ const AlbumPreview: FC<Props> = ({ album, saved }) => {
 				by {album.artists[0].name}
 			</Typography>
 			<img src={album.images[1].url} alt={album.name} />
-			<IconButton
-				onClick={handleSubmit}
-				sx={{
-					'position': 'absolute',
-					'bottom': 12,
-					'right': 12,
-					'backgroundColor': 'primary.main',
-					'opacity': 0.7,
-					'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
-					'&:hover': {
-						backgroundColor: 'primary.main',
-						opacity: 1
-					}
-				}}
-			>
-				{saved ? <ClearIcon /> : <AddIcon />}
-			</IconButton>
+			<RatingStrip initStars={4} />
 		</Paper>
 	);
 };

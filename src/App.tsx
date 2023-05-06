@@ -36,8 +36,8 @@ const rootRoute = new RootRoute({
 				<AppBar sx={{ position: 'sticky' }}>
 					<Container maxWidth="md">
 						<Toolbar disableGutters sx={{ gap: 2 }}>
-							<ButtonLink to="/">Albums</ButtonLink>
-							<ButtonLink to="/search">Search</ButtonLink>
+							<ButtonLink to="/">Search</ButtonLink>
+							<ButtonLink to="/albums">Albums</ButtonLink>
 							<Box sx={{ flexGrow: 1 }} />
 							{!user ? (
 								<ButtonLink to="/login">Login</ButtonLink>
@@ -72,13 +72,13 @@ const rootRoute = new RootRoute({
 const indexRoute = new Route({
 	getParentRoute: () => rootRoute,
 	path: '/',
-	component: Albums
+	component: Search
 });
 
-const searchRoute = new Route({
+const albumsRoute = new Route({
 	getParentRoute: () => rootRoute,
-	path: '/search',
-	component: Search
+	path: '/albums',
+	component: Albums
 });
 
 const loginRoute = new Route({
@@ -95,7 +95,7 @@ const notFoundRoute = new Route({
 
 const routeTree = rootRoute.addChildren([
 	indexRoute,
-	searchRoute,
+	albumsRoute,
 	loginRoute,
 	notFoundRoute
 ]);
