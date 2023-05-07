@@ -67,11 +67,10 @@ const rootRoute = new RootRoute({
 					}}
 				>
 					<SavedAlbumsProvider>
-						<Outlet />
+						<SavedArtistsProvider>
+							<Outlet />
+						</SavedArtistsProvider>
 					</SavedAlbumsProvider>
-					<SavedArtistsProvider>
-						<Outlet />
-					</SavedArtistsProvider>
 				</Container>
 			</ThemeProvider>
 		);

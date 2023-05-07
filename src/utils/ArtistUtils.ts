@@ -11,9 +11,11 @@ type ArtistImage = {
 export type ArtistPreviewType = {
 	id: string;
 	name: string;
-	artists: ArtistArtist[];
-	release_date: string;
-	total_tracks: number;
+	artists: ArtistArtist[]; // to remove
+	followers: number; // added
+	genres: string[]; // added
+	release_date: string; // to remove
+	total_tracks: number; // to remove
 	images: ArtistImage[];
 	popularity?: number;
 };
