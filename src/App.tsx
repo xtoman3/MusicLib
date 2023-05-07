@@ -25,6 +25,7 @@ import { SpotifyApiProvider } from './hooks/useSpotifyApi';
 import Search from './pages/Search';
 import Albums from './pages/Albums';
 import { SavedAlbumsProvider } from './hooks/useSavedAlbums';
+import AlbumDetail from './pages/AlbumDetail';
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -84,6 +85,12 @@ const albumsRoute = new Route({
 	component: Albums
 });
 
+const albumDetailRoute = new Route({
+	getParentRoute: () => rootRoute,
+	path: 'album/$albumId',
+	component: AlbumDetail
+});
+
 const loginRoute = new Route({
 	getParentRoute: () => rootRoute,
 	path: '/login',
@@ -99,6 +106,7 @@ const notFoundRoute = new Route({
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	albumsRoute,
+	albumDetailRoute,
 	loginRoute,
 	notFoundRoute
 ]);
