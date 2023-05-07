@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { FC, useEffect, useState } from 'react';
+import { Box, Paper, Typography } from '@mui/material';
 import { useParams } from '@tanstack/react-router';
 
 import usePageTitle from '../hooks/usePageTitle';
@@ -31,32 +31,50 @@ const AlbumDetail: FC = () => {
 		return <Typography variant="h4">Album not found</Typography>;
 	}
 	return (
-		<Box sx={{ display: 'flex' }}>
-			{/* Image */}
-			<Box sx={{ marginRight: 2 }}>
-				<img src={album.images[0].url} alt={album.name} />
-			</Box>
-
-			{/* Album Name and Artist */}
-			<Box>
-				<Typography variant="h6">{album.name}</Typography>
-				<Typography variant="subtitle1">{album.artists[0].name}</Typography>
-			</Box>
-
-			{/* Details */}
-			<Box sx={{ marginTop: 2 }}>
-				<Typography variant="body1">
-					Release Date: {album.release_date}
-				</Typography>
-				<Typography variant="body1">Popularity: {album.popularity}</Typography>
-				<Typography variant="body1">
-					Total Tracks: {album.total_tracks}
-				</Typography>
+		<Paper
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				width: '100%',
+				maxWidth: 'lg'
+			}}
+		>
+			<Box
+				sx={{
+					padding: 4,
+					display: 'flex',
+					flexDirection: 'row',
+					flexWrap: 'wrap',
+					justifyContent: 'center',
+					alignItems: 'flex-start',
+					alignContent: 'flex-start'
+				}}
+			>
+				<img
+					src={album.images[1].url}
+					alt={album.name}
+					style={{ maxWidth: '100%' }}
+				/>
+				<Box sx={{ margin: 2, display: 'flex', flexDirection: 'column' }}>
+					<Typography variant="h3">{album.name}</Typography>
+					<Typography variant="h5">by {album.artists[0].name}</Typography>
+					<Box sx={{ marginTop: 2 }}>
+						<Typography variant="body1">
+							Release Date: {album.release_date}
+						</Typography>
+						<Typography variant="body1">
+							Popularity: {album.popularity}
+						</Typography>
+						<Typography variant="body1">
+							Total Tracks: {album.total_tracks}
+						</Typography>
+					</Box>
+				</Box>
 			</Box>
 
 			{/* Track List */}
 			{/* Add your track list component here */}
-		</Box>
+		</Paper>
 	);
 };
 
