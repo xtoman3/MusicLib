@@ -6,19 +6,19 @@ import { useNavigate } from '@tanstack/react-router';
 import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
-import { albumsDocument } from '../firebase';
-import { AlbumPreviewType } from '../utils/AlbumUtils';
+import { artistsDocument } from '../firebase';
+import { ArtistPreviewType } from '../utils/ArtistUtils';
 
 import RatingStrip from './RatingStrip';
 
 type Props = {
-	album: AlbumPreviewType;
+	artist: ArtistPreviewType;
 	saved: boolean;
 	rating?: number;
 	showRating?: boolean;
 };
 
-const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
+const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 	const user = useLoggedInUser();
 	const navigate = useNavigate();
 
@@ -26,19 +26,19 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 		if (!user) navigate({ to: '/login' });
 		else {
 			if (!saved)
-				await updateDoc(albumsDocument(user.uid), {
-					ids: arrayUnion(album.id)
+				await updateDoc(artistsDocument(user.uid), {
+					ids: arrayUnion(artist.id)
 				});
 			else
-				await updateDoc(albumsDocument(user.uid), {
-					ids: arrayRemove(album.id)
+				await updateDoc(artistsDocument(user.uid), {
+					ids: arrayRemove(artist.id)
 				});
 		}
 	};
 
 	return (
 		<Paper
-			key={album.id}
+			key={artist.id}
 			sx={{
 				p: 2,
 				m: 1,
@@ -55,14 +55,14 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 			>
 				<Typography
 					variant="h6"
-					title={album.name}
+					title={artist.name}
 					sx={{
 						overflow: 'hidden',
 						whiteSpace: 'nowrap',
 						textOverflow: 'ellipsis'
 					}}
 				>
-					{album.name}
+					{artist.name}
 				</Typography>
 				<Box sx={{ flexGrow: 1 }} />
 				<IconButton
@@ -85,21 +85,21 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 
 			<Typography
 				variant="subtitle1"
-				title={album.artists[0].name}
+				title={artist.artists[0].name}
 				sx={{
 					overflow: 'hidden',
 					whiteSpace: 'nowrap',
 					textOverflow: 'ellipsis'
 				}}
 			>
-				by {album.artists[0].name}
+				by {artist.artists[0].name}
 			</Typography>
-			<img src={album.images[1].url} alt={album.name} />
+			<img src={artist.images[1].url} alt={artist.name} />
 			{showRating && (
-				<RatingStrip id={album.id} type="Album" initStars={rating ?? 0} />
+				<RatingStrip id={artist.id} type="Artist" initStars={rating ?? 0} />
 			)}
 		</Paper>
 	);
 };
 
-export default AlbumPreview;
+export default ArtistPreview;

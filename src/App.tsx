@@ -24,7 +24,9 @@ import { signOut } from './firebase';
 import { SpotifyApiProvider } from './hooks/useSpotifyApi';
 import Search from './pages/Search';
 import Albums from './pages/Albums';
+import Artists from './pages/Artists';
 import { SavedAlbumsProvider } from './hooks/useSavedAlbums';
+import { SavedArtistsProvider } from './hooks/useSavedArtists';
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -39,6 +41,7 @@ const rootRoute = new RootRoute({
 						<Toolbar disableGutters sx={{ gap: 2 }}>
 							<ButtonLink to="/">Search</ButtonLink>
 							<ButtonLink to="/albums">Albums</ButtonLink>
+							<ButtonLink to="/artists">Artists</ButtonLink>
 							<Box sx={{ flexGrow: 1 }} />
 							{!user ? (
 								<ButtonLink to="/login">Login</ButtonLink>
@@ -66,6 +69,9 @@ const rootRoute = new RootRoute({
 					<SavedAlbumsProvider>
 						<Outlet />
 					</SavedAlbumsProvider>
+					<SavedArtistsProvider>
+						<Outlet />
+					</SavedArtistsProvider>
 				</Container>
 			</ThemeProvider>
 		);
@@ -84,6 +90,12 @@ const albumsRoute = new Route({
 	component: Albums
 });
 
+const artistsRoute = new Route({
+	getParentRoute: () => rootRoute,
+	path: '/artists',
+	component: Artists
+});
+
 const loginRoute = new Route({
 	getParentRoute: () => rootRoute,
 	path: '/login',
@@ -99,6 +111,7 @@ const notFoundRoute = new Route({
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	albumsRoute,
+	artistsRoute,
 	loginRoute,
 	notFoundRoute
 ]);
