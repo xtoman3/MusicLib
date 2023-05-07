@@ -36,6 +36,24 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 		}
 	};
 
+	const getFormatedGenres = (genres: string[]): string => {
+		let result: string;
+		switch (genres.length) {
+			case 0:
+				return 'No genres';
+			case 1:
+				result = 'genre: ';
+				break;
+			default:
+				result = 'genres: ';
+				break;
+		}
+		for (let i = 0; i < genres.length; i++) {
+			result += `${genres[i]}, `;
+		}
+		return result.slice(0, result.length - 2);
+	};
+
 	return (
 		<Paper
 			key={artist.id}
@@ -88,11 +106,11 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 				title={artist.genres[0]}
 				sx={{
 					overflow: 'hidden',
-					whiteSpace: 'nowrap',
-					textOverflow: 'ellipsis'
+					whiteSpace: 'pre-wrap',
+					display: 'block'
 				}}
 			>
-				genre {artist.genres[0]}
+				{getFormatedGenres(artist.genres)}
 			</Typography>
 			<img src={artist.images[0]?.url} alt={artist.name} />
 			{showRating && (
