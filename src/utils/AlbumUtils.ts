@@ -15,4 +15,5 @@ export type AlbumPreviewType = {
 	release_date: string;
 	total_tracks: number;
 	images: AlbumImage[];
+	popularity?: number;
 };

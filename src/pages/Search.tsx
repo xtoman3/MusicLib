@@ -1,18 +1,19 @@
-import {Box, TextField} from '@mui/material';
-import React, {FC, useEffect, useState} from 'react';
+import { Box, TextField } from '@mui/material';
+import React, { FC, useEffect, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
-import {useSpotifyApi} from '../hooks/useSpotifyApi';
+import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import AlbumPreview from '../components/AlbumPreview';
-import {AlbumPreviewType} from '../utils/AlbumUtils';
-import {useSavedAlbums} from '../hooks/useSavedAlbums';
+import { AlbumPreviewType } from '../utils/AlbumUtils';
+import { useSavedAlbums } from '../hooks/useSavedAlbums';
 
 const Search: FC = () => {
 	usePageTitle('Search');
 	const spotifyApi = useSpotifyApi();
 	const {
 		albums: { albums, setAlbums },
-		ids: { ids: savedAlbumIds }
+		ids: { ids: savedAlbumIds },
+		ratings: { ratings }
 	} = useSavedAlbums();
 
 	const [search, setSearch] = useState<string>('');
@@ -63,7 +64,9 @@ const Search: FC = () => {
 					<AlbumPreview
 						key={album.id}
 						album={album}
-						saved={savedAlbumIds.includes(album.id)}
+						saved={savedAlbumIds.has(album.id)}
+						rating={ratings.get(album.id) ?? 0}
+						showRating
 					/>
 				))}
 			</Box>

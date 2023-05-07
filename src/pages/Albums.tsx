@@ -18,9 +18,9 @@ const Albums: FC = () => {
 	} = useSavedAlbums();
 
 	useEffect(() => {
-		if (!spotifyApi || savedAlbumIds.length === 0) return;
+		if (!spotifyApi || savedAlbumIds.size === 0) return;
 		spotifyApi
-			.getAlbums(savedAlbumIds)
+			.getAlbums([...savedAlbumIds])
 			.then(response => {
 				setAlbums(response.body.albums as AlbumPreviewType[]);
 			})
@@ -38,15 +38,17 @@ const Albums: FC = () => {
 				alignContent: 'flex-start'
 			}}
 		>
-			{albums?.map(album => (
-				<AlbumPreview
-					key={album.id}
-					album={album}
-					rating={ratings.get(album.id) ?? 0}
-					saved={savedAlbumIds.includes(album.id)}
-					showRating
-				/>
-			))}
+			{albums
+				?.filter(album => savedAlbumIds.has(album.id))
+				.map(album => (
+					<AlbumPreview
+						key={album.id}
+						album={album}
+						rating={ratings.get(album.id) ?? 0}
+						saved={savedAlbumIds.has(album.id)}
+						showRating
+					/>
+				))}
 		</Box>
 	);
 };

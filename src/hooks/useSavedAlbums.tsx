@@ -21,8 +21,8 @@ type SavedAlbums = {
 		setAlbums: Dispatch<SetStateAction<AlbumPreviewType[]>>;
 	};
 	ids: {
-		ids: string[];
-		setIds: Dispatch<SetStateAction<string[]>>;
+		ids: Set<string>;
+		setIds: Dispatch<SetStateAction<Set<string>>>;
 	};
 	ratings: {
 		ratings: Map<string, number>;
@@ -36,7 +36,7 @@ export const SavedAlbumsProvider: FC<PropsWithChildren> = ({ children }) => {
 	const user = useLoggedInUser();
 
 	const [albums, setAlbums] = useState<AlbumPreviewType[]>([]);
-	const [ids, setIds] = useState<string[]>([]);
+	const [ids, setIds] = useState<Set<string>>(new Set<string>());
 	const [ratings, setRatings] = useState<Map<string, number>>(
 		new Map<string, number>()
 	);
@@ -51,7 +51,7 @@ export const SavedAlbumsProvider: FC<PropsWithChildren> = ({ children }) => {
 		if (!user) return;
 		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
 			const data = doc.data();
-			setIds(data?.ids ?? []);
+			setIds(new Set<string>(data?.ids ?? []));
 			setRatings(new Map<string, number>(Object.entries(data?.ratings ?? {})));
 		});
 
