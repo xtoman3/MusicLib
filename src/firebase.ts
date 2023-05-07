@@ -57,6 +57,11 @@ export type SavedAlbums = {
 	ratings: Map<string, number>;
 };
 
+export type SavedArtist = {
+	ids: string[];
+	ratings: Map<string, number>;
+};
+
 export type ArtistFirebase = {
 	id: string;
 };
@@ -66,5 +71,13 @@ export const albumsCollection = collection(
 	'albums'
 ) as CollectionReference<SavedAlbums>;
 
+export const ArtistCollection = collection(
+	db,
+	'artists'
+) as CollectionReference<SavedArtist>;
+
 export const albumsDocument = (id: string) =>
 	doc(db, 'albums', id) as DocumentReference<SavedAlbums>;
+
+export const artistsDocument = (id: string) =>
+	doc(db, 'artists', id) as DocumentReference<SavedArtist>;
