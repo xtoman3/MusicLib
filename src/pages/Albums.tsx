@@ -44,8 +44,8 @@ const Albums: FC = () => {
 					<AlbumPreview
 						key={album.id}
 						album={album}
-						rating={ratings.get(album.id) ?? 0}
 						saved={savedAlbumIds.has(album.id)}
+						rating={ratings.get(album.id) ?? 0}
 						showRating
 					/>
 				))}

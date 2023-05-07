@@ -1,4 +1,4 @@
-import { Box, TextField } from '@mui/material';
+import { Box, MenuItem, Select, TextField } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
@@ -6,6 +6,12 @@ import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import AlbumPreview from '../components/AlbumPreview';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
+
+enum SearchOptions {
+	Albums = 'Albums',
+	Artists = 'Artists',
+	Tracks = 'Tracks'
+}
 
 const Search: FC = () => {
 	usePageTitle('Search');
@@ -17,6 +23,9 @@ const Search: FC = () => {
 	} = useSavedAlbums();
 
 	const [search, setSearch] = useState<string>('');
+	const [searchOption, setSearchOption] = useState<SearchOptions>(
+		SearchOptions.Albums
+	);
 
 	const searchAlbums = () => {
 		spotifyApi
@@ -27,11 +36,40 @@ const Search: FC = () => {
 			.catch(error => alert(error));
 	};
 
+	const searchArtists = () => {
+		spotifyApi
+			?.searchArtists(search)
+			.then(response => console.log(response))
+			.catch(error => alert(error));
+	};
+
+	const searchTracks = () => {
+		spotifyApi
+			?.searchTracks(search)
+			.then(response => console.log(response))
+			.catch(error => alert(error));
+	};
+
 	useEffect(() => {
 		if (search.length === 0) {
 			setAlbums([]);
-		} else searchAlbums();
-	}, [search]);
+			return;
+		}
+
+		switch (searchOption) {
+			case SearchOptions.Albums:
+				searchAlbums();
+				break;
+			case SearchOptions.Artists:
+				setAlbums([]);
+				searchArtists();
+				break;
+			case SearchOptions.Tracks:
+				setAlbums([]);
+				searchTracks();
+				break;
+		}
+	}, [search, searchOption]);
 
 	return (
 		<>
@@ -39,16 +77,32 @@ const Search: FC = () => {
 				component="form"
 				maxWidth="sm"
 				onSubmit={e => e.preventDefault()}
-				sx={{ width: '100%' }}
+				sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}
 			>
 				<TextField
 					id="query"
-					label="Search albums"
+					label={`Search ${searchOption}`}
 					fullWidth
 					variant="standard"
 					value={search}
 					onChange={e => setSearch(e.target.value)}
 				/>
+				<Select
+					labelId="select-label"
+					id="select"
+					variant="standard"
+					value={searchOption}
+					onChange={e =>
+						setSearchOption(
+							SearchOptions[e.target.value as keyof typeof SearchOptions]
+						)
+					}
+					sx={{ marginLeft: 2 }}
+				>
+					<MenuItem value={SearchOptions.Albums}>Albums</MenuItem>
+					<MenuItem value={SearchOptions.Artists}>Artists</MenuItem>
+					<MenuItem value={SearchOptions.Tracks}>Tracks</MenuItem>
+				</Select>
 			</Box>
 			<Box
 				sx={{
