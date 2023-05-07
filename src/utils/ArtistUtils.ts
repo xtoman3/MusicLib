@@ -1,21 +1,18 @@
-type ArtistArtist = {
-	id: string;
-	name: string;
-};
-
 type ArtistImage = {
 	height: number;
 	url: string;
 };
 
+type ArtistFollowers = {
+	// href?: string;
+	total: number;
+};
+
 export type ArtistPreviewType = {
 	id: string;
 	name: string;
-	artists: ArtistArtist[]; // to remove
-	followers: number; // added
-	genres: string[]; // added
-	release_date: string; // to remove
-	total_tracks: number; // to remove
+	genres: string[];
+	followers: ArtistFollowers;
 	images: ArtistImage[];
 	popularity?: number;
 };

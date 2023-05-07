@@ -85,16 +85,16 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 
 			<Typography
 				variant="subtitle1"
-				title={artist.artists[0].name}
+				title={artist.genres[0]}
 				sx={{
 					overflow: 'hidden',
 					whiteSpace: 'nowrap',
 					textOverflow: 'ellipsis'
 				}}
 			>
-				by {artist.artists[0].name}
+				genre {artist.genres[0]}
 			</Typography>
-			<img src={artist.images[1].url} alt={artist.name} />
+			<img src={artist.images[0]?.url} alt={artist.name} />
 			{showRating && (
 				<RatingStrip id={artist.id} type="Artist" initStars={rating ?? 0} />
 			)}
