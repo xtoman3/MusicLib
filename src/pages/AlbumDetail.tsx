@@ -5,6 +5,7 @@ import { useParams } from '@tanstack/react-router';
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
+import RatingStrip from '../components/RatingStrip';
 
 const AlbumDetail: FC = () => {
 	usePageTitle('Album');
@@ -69,6 +70,10 @@ const AlbumDetail: FC = () => {
 							Total Tracks: {album.total_tracks}
 						</Typography>
 					</Box>
+					<RatingStrip
+						albumId={album.id}
+						initStars={ratings.get(album.id) ?? 0}
+					/>
 				</Box>
 			</Box>
 
