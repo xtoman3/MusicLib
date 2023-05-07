@@ -36,7 +36,7 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 		}
 	};
 
-	const getFormatedGenres = (genres: string[]): string => {
+	const getFormattedGenres = (genres: string[]): string => {
 		let result: string;
 		switch (genres.length) {
 			case 0:
@@ -103,6 +103,18 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 
 			<Typography
 				variant="subtitle1"
+				title="Number of followers"
+				sx={{
+					overflow: 'hidden',
+					whiteSpace: 'pre-wrap',
+					display: 'block'
+				}}
+			>
+				followers: {artist.followers.total}
+			</Typography>
+
+			<Typography
+				variant="subtitle1"
 				title={artist.genres[0]}
 				sx={{
 					overflow: 'hidden',
@@ -110,9 +122,23 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 					display: 'block'
 				}}
 			>
-				{getFormatedGenres(artist.genres)}
+				{getFormattedGenres(artist.genres)}
 			</Typography>
-			<img src={artist.images[0]?.url} alt={artist.name} />
+			<img
+				src={artist.images[0]?.url ?? 'https://shorturl.at/cnqtP'}
+				alt={artist.name}
+			/>
+			<Typography
+				variant="subtitle2"
+				title="popularity"
+				sx={{
+					overflow: 'hidden',
+					whiteSpace: 'pre-wrap',
+					display: 'block'
+				}}
+			>
+				popularity: {artist.popularity}
+			</Typography>
 			{showRating && (
 				<RatingStrip id={artist.id} type="Artist" initStars={rating ?? 0} />
 			)}
