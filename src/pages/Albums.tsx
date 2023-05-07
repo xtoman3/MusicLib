@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import React, { FC, useEffect } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
@@ -28,28 +28,19 @@ const Albums: FC = () => {
 	}, [savedAlbumIds]);
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'row',
-				flexWrap: 'wrap',
-				justifyContent: 'center',
-				alignItems: 'flex-start',
-				alignContent: 'flex-start'
-			}}
-		>
+		<Grid container spacing={1}>
 			{albums
 				?.filter(album => savedAlbumIds.has(album.id))
 				.map(album => (
 					<AlbumPreview
 						key={album.id}
 						album={album}
-						rating={ratings.get(album.id) ?? 0}
 						saved={savedAlbumIds.has(album.id)}
+						rating={ratings.get(album.id) ?? 0}
 						showRating
 					/>
 				))}
-		</Box>
+		</Grid>
 	);
 };
 
