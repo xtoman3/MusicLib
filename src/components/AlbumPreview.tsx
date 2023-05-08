@@ -105,7 +105,7 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 				</Typography>
 				<img src={album.images[0].url} alt={album.name} />
 				{showRating && (
-					<RatingStrip albumId={album.id} initStars={rating ?? 0} />
+					<RatingStrip id={album.id} type="Album" initStars={rating ?? 0} />
 				)}
 			</Paper>
 		</Grid>

@@ -4,14 +4,15 @@ import { Star, StarBorder } from '@mui/icons-material';
 import { setDoc } from 'firebase/firestore';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
-import { albumsDocument } from '../firebase';
+import { albumsDocument, artistsDocument } from '../firebase';
 
 type Props = {
-	albumId: string;
+	id: string;
+	type: string;
 	initStars: number;
 };
 
-const RatingStrip: FC<Props> = ({ albumId, initStars }) => {
+const RatingStrip: FC<Props> = ({ id, type, initStars }) => {
 	const user = useLoggedInUser();
 	const [stars, setStars] = useState<number>(initStars);
 
@@ -19,15 +20,27 @@ const RatingStrip: FC<Props> = ({ albumId, initStars }) => {
 		if (!user) return;
 		setStars(starRating);
 
-		setDoc(
-			albumsDocument(user.uid),
-			{
-				ratings: {
-					[albumId]: starRating
-				}
-			},
-			{ merge: true }
-		);
+		if (type === 'Album') {
+			setDoc(
+				albumsDocument(user.uid),
+				{
+					ratings: {
+						[id]: starRating
+					}
+				},
+				{ merge: true }
+			);
+		} else if (type === 'Artist') {
+			setDoc(
+				artistsDocument(user.uid),
+				{
+					ratings: {
+						[id]: starRating
+					}
+				},
+				{ merge: true }
+			);
+		}
 	};
 
 	return (

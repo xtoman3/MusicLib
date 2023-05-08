@@ -1,11 +1,14 @@
-import {Box, Grid, MenuItem, Select, TextField} from '@mui/material';
+import { Box, Grid, MenuItem, Select, TextField } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import AlbumPreview from '../components/AlbumPreview';
+import ArtistPreview from '../components/ArtistPreview';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
+import { ArtistPreviewType } from '../utils/ArtistUtils';
+import { useSavedArtists } from '../hooks/useSavedArtists';
 
 enum SearchOptions {
 	Albums = 'Albums',
@@ -21,6 +24,12 @@ const Search: FC = () => {
 		ids: { ids: savedAlbumIds },
 		ratings: { ratings }
 	} = useSavedAlbums();
+
+	const {
+		artists: { artists, setArtists },
+		ids: { ids: savedArtistIds },
+		ratings: { ratings: ArtistRatings }
+	} = useSavedArtists();
 
 	const [search, setSearch] = useState<string>('');
 	const [searchOption, setSearchOption] = useState<SearchOptions>(
@@ -39,7 +48,9 @@ const Search: FC = () => {
 	const searchArtists = () => {
 		spotifyApi
 			?.searchArtists(search)
-			.then(response => console.log(response))
+			.then(response => {
+				setArtists(response.body.artists?.items as ArtistPreviewType[]);
+			})
 			.catch(error => alert(error));
 	};
 
@@ -111,6 +122,15 @@ const Search: FC = () => {
 						album={album}
 						saved={savedAlbumIds.has(album.id)}
 						rating={ratings.get(album.id) ?? 0}
+						showRating
+					/>
+				))}
+				{artists?.map(artist => (
+					<ArtistPreview
+						key={artist.id}
+						artist={artist}
+						saved={savedArtistIds.has(artist.id)}
+						rating={ArtistRatings.get(artist.id) ?? 0}
 						showRating
 					/>
 				))}
