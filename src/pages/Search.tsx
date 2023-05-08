@@ -11,7 +11,7 @@ import { ArtistPreviewType } from '../utils/ArtistUtils';
 import { useSavedArtists } from '../hooks/useSavedArtists';
 import { useSavedTracks } from '../hooks/useSavedTracks';
 import { TrackPreviewType } from '../utils/TrackUtils';
-import TrackPreview from "../components/TrackPreview";
+import TrackPreview from '../components/TrackPreview';
 
 enum SearchOptions {
 	Albums = 'Albums',
