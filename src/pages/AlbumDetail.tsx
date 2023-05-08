@@ -71,7 +71,8 @@ const AlbumDetail: FC = () => {
 						</Typography>
 					</Box>
 					<RatingStrip
-						albumId={album.id}
+						id={album.id}
+						type="Album"
 						initStars={ratings.get(album.id) ?? 0}
 					/>
 				</Box>
