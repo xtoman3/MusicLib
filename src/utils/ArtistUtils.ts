@@ -4,7 +4,6 @@ type ArtistImage = {
 };
 
 type ArtistFollowers = {
-	// href?: string;
 	total: number;
 };
 

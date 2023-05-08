@@ -1,4 +1,4 @@
-import {
+import React, {
 	createContext,
 	Dispatch,
 	FC,
@@ -10,15 +10,15 @@ import {
 } from 'react';
 import { onSnapshot, setDoc } from 'firebase/firestore';
 
-import { ArtistPreviewType } from '../utils/ArtistUtils';
-import { artistsDocument } from '../firebase';
+import { TrackPreviewType } from '../utils/TrackUtils';
+import { tracksDocument } from '../firebase';
 
 import { useLoggedInUser } from './useLoggedInUser';
 
-type SavedArtists = {
-	artists: {
-		artists: ArtistPreviewType[];
-		setArtists: Dispatch<SetStateAction<ArtistPreviewType[]>>;
+type SavedTracks = {
+	tracks: {
+		tracks: TrackPreviewType[];
+		setTracks: Dispatch<SetStateAction<TrackPreviewType[]>>;
 	};
 	ids: {
 		ids: Set<string>;
@@ -30,19 +30,19 @@ type SavedArtists = {
 	};
 };
 
-const SavedArtistsContext = createContext<SavedArtists>(undefined as never);
+const SavedTracksContext = createContext<SavedTracks>(undefined as never);
 
-export const SavedArtistsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const SavedTracksProvider: FC<PropsWithChildren> = ({ children }) => {
 	const user = useLoggedInUser();
 
-	const [artists, setArtists] = useState<ArtistPreviewType[]>([]);
+	const [tracks, setTracks] = useState<TrackPreviewType[]>([]);
 	const [ids, setIds] = useState<Set<string>>(new Set<string>());
 	const [ratings, setRatings] = useState<Map<string, number>>(
 		new Map<string, number>()
 	);
 
-	const savedArtistsValue: SavedArtists = {
-		artists: { artists, setArtists },
+	const savedTracksValue: SavedTracks = {
+		tracks: { tracks, setTracks },
 		ids: { ids, setIds },
 		ratings: { ratings, setRatings }
 	};
@@ -51,9 +51,9 @@ export const SavedArtistsProvider: FC<PropsWithChildren> = ({ children }) => {
 		if (!user) return;
 
 		// Initialize document with new user if non-existent
-		setDoc(artistsDocument(user.uid), {}, { merge: true });
+		setDoc(tracksDocument(user.uid), {}, { merge: true });
 
-		const unsubscribe = onSnapshot(artistsDocument(user.uid), doc => {
+		const unsubscribe = onSnapshot(tracksDocument(user.uid), doc => {
 			const data = doc.data();
 			setIds(new Set<string>(data?.ids ?? []));
 			setRatings(new Map<string, number>(Object.entries(data?.ratings ?? {})));
@@ -65,10 +65,10 @@ export const SavedArtistsProvider: FC<PropsWithChildren> = ({ children }) => {
 	}, [user]);
 
 	return (
-		<SavedArtistsContext.Provider value={savedArtistsValue}>
+		<SavedTracksContext.Provider value={savedTracksValue}>
 			{children}
-		</SavedArtistsContext.Provider>
+		</SavedTracksContext.Provider>
 	);
 };
 
-export const useSavedArtists = () => useContext(SavedArtistsContext);
+export const useSavedTracks = () => useContext(SavedTracksContext);

@@ -62,6 +62,11 @@ export type SavedArtist = {
 	ratings: Map<string, number>;
 };
 
+export type SavedTrack = {
+	ids: string[];
+	ratings: Map<string, number>;
+};
+
 export const albumsCollection = collection(
 	db,
 	'albums'
@@ -72,8 +77,16 @@ export const ArtistCollection = collection(
 	'artists'
 ) as CollectionReference<SavedArtist>;
 
+export const TrackCollection = collection(
+	db,
+	'tracks'
+) as CollectionReference<SavedArtist>;
+
 export const albumsDocument = (id: string) =>
 	doc(db, 'albums', id) as DocumentReference<SavedAlbums>;
 
 export const artistsDocument = (id: string) =>
 	doc(db, 'artists', id) as DocumentReference<SavedArtist>;
+
+export const tracksDocument = (id: string) =>
+	doc(db, 'tracks', id) as DocumentReference<SavedTrack>;
