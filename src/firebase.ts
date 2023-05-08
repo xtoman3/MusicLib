@@ -62,10 +62,6 @@ export type SavedArtist = {
 	ratings: Map<string, number>;
 };
 
-export type ArtistFirebase = {
-	id: string;
-};
-
 export const albumsCollection = collection(
 	db,
 	'albums'
