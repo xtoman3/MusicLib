@@ -40,6 +40,10 @@ const Artists: FC = () => {
 		>
 			{artists
 				?.filter(artist => savedArtistIds.has(artist.id))
+				.sort(
+					(a: ArtistPreviewType, b: ArtistPreviewType) =>
+						b.followers.total - a.followers.total
+				)
 				.map(artist => (
 					<ArtistPreview
 						key={artist.id}
