@@ -72,11 +72,9 @@ const Search: FC = () => {
 				searchAlbums();
 				break;
 			case SearchOptions.Artists:
-				setAlbums([]);
 				searchArtists();
 				break;
 			case SearchOptions.Tracks:
-				setAlbums([]);
 				searchTracks();
 				break;
 		}
@@ -116,24 +114,26 @@ const Search: FC = () => {
 				</Select>
 			</Box>
 			<Grid container spacing={1}>
-				{albums?.map(album => (
-					<AlbumPreview
-						key={album.id}
-						album={album}
-						saved={savedAlbumIds.has(album.id)}
-						rating={ratings.get(album.id) ?? 0}
-						showRating
-					/>
-				))}
-				{artists?.map(artist => (
-					<ArtistPreview
-						key={artist.id}
-						artist={artist}
-						saved={savedArtistIds.has(artist.id)}
-						rating={ArtistRatings.get(artist.id) ?? 0}
-						showRating
-					/>
-				))}
+				{searchOption === SearchOptions.Albums &&
+					albums?.map(album => (
+						<AlbumPreview
+							key={album.id}
+							album={album}
+							saved={savedAlbumIds.has(album.id)}
+							rating={ratings.get(album.id) ?? 0}
+							showRating
+						/>
+					))}
+				{searchOption === SearchOptions.Artists &&
+					artists?.map(artist => (
+						<ArtistPreview
+							key={artist.id}
+							artist={artist}
+							saved={savedArtistIds.has(artist.id)}
+							rating={ArtistRatings.get(artist.id) ?? 0}
+							showRating
+						/>
+					))}
 			</Grid>
 		</>
 	);
