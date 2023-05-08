@@ -10,7 +10,6 @@ import { albumsDocument } from '../firebase';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
 
 import RatingStrip from './RatingStrip';
-import ButtonLink from './ButtonLink';
 
 type Props = {
 	album: AlbumPreviewType;
