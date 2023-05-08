@@ -4,48 +4,39 @@ import { Star, StarBorder } from '@mui/icons-material';
 import { setDoc } from 'firebase/firestore';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
-import { albumsDocument, artistsDocument } from '../firebase';
+import { albumsDocument, artistsDocument, tracksDocument } from '../firebase';
 
 type Props = {
 	id: string;
 	type: string;
 	initStars: number;
+	size?: string;
 };
 
-const RatingStrip: FC<Props> = ({ id, type, initStars }) => {
+const RatingStrip: FC<Props> = ({ id, type, initStars, size }) => {
 	const user = useLoggedInUser();
 	const [stars, setStars] = useState<number>(initStars);
 
 	const submitRating = (starRating: number) => {
 		if (!user) return;
 		setStars(starRating);
+		let doc = albumsDocument(user.uid);
+		if (type === 'Artist') doc = artistsDocument(user.uid);
+		if (type === 'Track') doc = tracksDocument(user.uid);
 
-		if (type === 'Album') {
-			setDoc(
-				albumsDocument(user.uid),
-				{
-					ratings: {
-						[id]: starRating
-					}
-				},
-				{ merge: true }
-			);
-		} else if (type === 'Artist') {
-			setDoc(
-				artistsDocument(user.uid),
-				{
-					ratings: {
-						[id]: starRating
-					}
-				},
-				{ merge: true }
-			);
-		}
+		setDoc(
+			doc,
+			{
+				ratings: {
+					[id]: starRating
+				}
+			},
+			{ merge: true }
+		);
 	};
 
 	return (
 		<Box
-			mt={2}
 			sx={{
 				display: 'flex',
 				justifyContent: 'center'
@@ -58,7 +49,11 @@ const RatingStrip: FC<Props> = ({ id, type, initStars }) => {
 					component="span"
 					onClick={() => submitRating(i + 1)}
 				>
-					{i < stars ? <Star /> : <StarBorder />}
+					{i < stars ? (
+						<Star fontSize={size ?? 'medium'} />
+					) : (
+						<StarBorder fontSize={size ?? 'medium'} />
+					)}
 				</IconButton>
 			))}
 		</Box>
