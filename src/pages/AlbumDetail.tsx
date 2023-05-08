@@ -1,24 +1,31 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import { useParams } from '@tanstack/react-router';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
 import RatingStrip from '../components/RatingStrip';
+import TrackPreview from '../components/TrackPreview';
+import { TrackPreviewType } from '../utils/TrackUtils';
+import { useSavedTracks } from '../hooks/useSavedTracks';
 
 const AlbumDetail: FC = () => {
 	usePageTitle('Album');
 	const spotifyApi = useSpotifyApi();
 	const {
-		ids: { ids: savedAlbumIds },
 		ratings: { ratings }
 	} = useSavedAlbums();
+
+	const {
+		ids: { ids: savedTrackIds }
+	} = useSavedTracks();
 
 	console.log(useParams());
 	const { albumId } = useParams();
 
 	const [album, setAlbum] = useState<SpotifyApi.SingleAlbumResponse>();
+	const [tracks, setTracks] = useState<TrackPreviewType[]>([]);
 
 	useEffect(() => {
 		if (!albumId) return;
@@ -26,6 +33,10 @@ const AlbumDetail: FC = () => {
 			?.getAlbum(albumId)
 			.then(response => setAlbum(response.body))
 			.catch(error => alert(error));
+
+		spotifyApi
+			?.getAlbumTracks(albumId)
+			.then(response => setTracks(response.body.items as TrackPreviewType[]));
 	}, [spotifyApi]);
 
 	if (!album) {
@@ -78,7 +89,23 @@ const AlbumDetail: FC = () => {
 				</Box>
 			</Box>
 
-
+			<Grid container spacing={1}>
+				{tracks
+					?.sort((trackA, trackB) => trackB.track_number - trackA.track_number)
+					.map(track => {
+						track.album = album;
+						return track;
+					})
+					.map(track => (
+						<TrackPreview
+							key={track.id}
+							track={track}
+							saved={savedTrackIds.has(track.id)}
+							rating={ratings.get(track.id) ?? 0}
+							showRating
+						/>
+					))}
+			</Grid>
 		</Paper>
 	);
 };

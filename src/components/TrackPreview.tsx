@@ -82,7 +82,7 @@ const TrackPreview: FC<Props> = ({ track, saved, rating, showRating }) => {
 					{track.name}
 				</Typography>
 				<Typography variant="body1" sx={{ marginX: 2, width: '20%' }}>
-					{track.album.name}
+					{track.album?.name ?? 'Unknown'}
 				</Typography>
 				<Typography variant="body1" sx={{ marginX: 2, width: '20%' }}>
 					{track.artists[0].name}

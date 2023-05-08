@@ -11,9 +11,9 @@ type TrackAlbum = {
 export type TrackPreviewType = {
 	id: string;
 	name: string;
-	album: TrackAlbum;
+	album?: TrackAlbum;
 	artists: TrackArtist[];
-	popularity: number;
+	popularity?: number;
 	track_number: number;
 	duration_ms: number;
 };
