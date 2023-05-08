@@ -27,6 +27,7 @@ import Albums from './pages/Albums';
 import Artists from './pages/Artists';
 import { SavedAlbumsProvider } from './hooks/useSavedAlbums';
 import { SavedArtistsProvider } from './hooks/useSavedArtists';
+import AlbumDetail from './pages/AlbumDetail';
 
 const rootRoute = new RootRoute({
 	component: () => {
@@ -95,6 +96,12 @@ const artistsRoute = new Route({
 	component: Artists
 });
 
+const albumDetailRoute = new Route({
+	getParentRoute: () => rootRoute,
+	path: 'album/$albumId',
+	component: AlbumDetail
+});
+
 const loginRoute = new Route({
 	getParentRoute: () => rootRoute,
 	path: '/login',
@@ -110,6 +117,7 @@ const notFoundRoute = new Route({
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	albumsRoute,
+	albumDetailRoute,
 	artistsRoute,
 	loginRoute,
 	notFoundRoute

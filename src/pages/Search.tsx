@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Grid, MenuItem, Select, TextField } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
@@ -115,16 +115,7 @@ const Search: FC = () => {
 					<MenuItem value={SearchOptions.Tracks}>Tracks</MenuItem>
 				</Select>
 			</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'wrap',
-					justifyContent: 'center',
-					alignItems: 'flex-start',
-					alignContent: 'flex-start'
-				}}
-			>
+			<Grid container spacing={1}>
 				{albums?.map(album => (
 					<AlbumPreview
 						key={album.id}
@@ -143,7 +134,7 @@ const Search: FC = () => {
 						showRating
 					/>
 				))}
-			</Box>
+			</Grid>
 		</>
 	);
 };

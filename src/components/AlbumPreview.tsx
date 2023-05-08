@@ -10,6 +10,7 @@ import { albumsDocument } from '../firebase';
 import { AlbumPreviewType } from '../utils/AlbumUtils';
 
 import RatingStrip from './RatingStrip';
+import ButtonLink from './ButtonLink';
 
 type Props = {
 	album: AlbumPreviewType;
@@ -54,10 +55,16 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 					<Typography
 						variant="h6"
 						title={album.name}
+						// @ts-ignore
+						onClick={() => navigate({ to: `/album/${album.id}` })}
 						sx={{
-							overflow: 'hidden',
-							whiteSpace: 'nowrap',
-							textOverflow: 'ellipsis'
+							'overflow': 'hidden',
+							'whiteSpace': 'nowrap',
+							'textOverflow': 'ellipsis',
+							'&:hover': {
+								color: 'primary.main',
+								opacity: 1
+							}
 						}}
 					>
 						{album.name}
@@ -85,9 +92,13 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 					variant="subtitle1"
 					title={album.artists[0].name}
 					sx={{
-						overflow: 'hidden',
-						whiteSpace: 'nowrap',
-						textOverflow: 'ellipsis'
+						'overflow': 'hidden',
+						'whiteSpace': 'nowrap',
+						'textOverflow': 'ellipsis',
+						'&:hover': {
+							color: 'primary.main',
+							opacity: 1
+						}
 					}}
 				>
 					by {album.artists[0].name}
