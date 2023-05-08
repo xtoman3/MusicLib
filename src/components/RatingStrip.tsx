@@ -50,8 +50,10 @@ const RatingStrip: FC<Props> = ({ id, type, initStars, size }) => {
 					onClick={() => submitRating(i + 1)}
 				>
 					{i < stars ? (
+						// @ts-ignore
 						<Star fontSize={size ?? 'medium'} />
 					) : (
+						// @ts-ignore
 						<StarBorder fontSize={size ?? 'medium'} />
 					)}
 				</IconButton>

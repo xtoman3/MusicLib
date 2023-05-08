@@ -6,7 +6,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import AddIcon from '@mui/icons-material/Add';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
-import { albumsDocument } from '../firebase';
+import { tracksDocument } from '../firebase';
 import { TrackPreviewType } from '../utils/TrackUtils';
 
 import RatingStrip from './RatingStrip';
@@ -34,11 +34,11 @@ const TrackPreview: FC<Props> = ({ track, saved, rating, showRating }) => {
 		if (!user) navigate({ to: '/login' });
 		else {
 			if (!saved)
-				await updateDoc(albumsDocument(user.uid), {
+				await updateDoc(tracksDocument(user.uid), {
 					ids: arrayUnion(track.id)
 				});
 			else
-				await updateDoc(albumsDocument(user.uid), {
+				await updateDoc(tracksDocument(user.uid), {
 					ids: arrayRemove(track.id)
 				});
 		}

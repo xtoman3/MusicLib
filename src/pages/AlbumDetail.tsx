@@ -78,8 +78,7 @@ const AlbumDetail: FC = () => {
 				</Box>
 			</Box>
 
-			{/* Track List */}
-			{/* Add your track list component here */}
+
 		</Paper>
 	);
 };
