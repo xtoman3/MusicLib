@@ -5,6 +5,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import { useSavedTracks } from '../hooks/useSavedTracks';
 import { TrackPreviewType } from '../utils/TrackUtils';
+import TrackPreview from "../components/TrackPreview";
 
 const Tracks: FC = () => {
 	usePageTitle('Tracks');
@@ -32,7 +33,13 @@ const Tracks: FC = () => {
 				?.filter(track => savedTrackIds.has(track.id))
 				// .sort(sortFunc)
 				.map(track => (
-					<Typography>Test</Typography>
+					<TrackPreview
+						key={track.id}
+						track={track}
+						saved={savedTrackIds.has(track.id)}
+						rating={ratings.get(track.id) ?? 0}
+						showRating
+					/>
 				))}
 		</Grid>
 	);

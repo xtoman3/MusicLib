@@ -9,6 +9,9 @@ import { AlbumPreviewType } from '../utils/AlbumUtils';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
 import { ArtistPreviewType } from '../utils/ArtistUtils';
 import { useSavedArtists } from '../hooks/useSavedArtists';
+import { useSavedTracks } from '../hooks/useSavedTracks';
+import { TrackPreviewType } from '../utils/TrackUtils';
+import TrackPreview from "../components/TrackPreview";
 
 enum SearchOptions {
 	Albums = 'Albums',
@@ -19,6 +22,7 @@ enum SearchOptions {
 const Search: FC = () => {
 	usePageTitle('Search');
 	const spotifyApi = useSpotifyApi();
+
 	const {
 		albums: { albums, setAlbums },
 		ids: { ids: savedAlbumIds },
@@ -31,39 +35,40 @@ const Search: FC = () => {
 		ratings: { ratings: ArtistRatings }
 	} = useSavedArtists();
 
+	const {
+		tracks: { tracks, setTracks },
+		ids: { ids: savedTrackIds },
+		ratings: { ratings: TrackRatings }
+	} = useSavedTracks();
+
 	const [search, setSearch] = useState<string>('');
 	const [searchOption, setSearchOption] = useState<SearchOptions>(
 		SearchOptions.Albums
 	);
 
 	const searchAlbums = () => {
-		spotifyApi
-			?.searchAlbums(search)
-			.then(response => {
-				setAlbums(response.body.albums?.items as AlbumPreviewType[]);
-			})
-			.catch(error => alert(error));
+		spotifyApi?.searchAlbums(search).then(response => {
+			setAlbums(response.body.albums?.items as AlbumPreviewType[]);
+		});
 	};
 
 	const searchArtists = () => {
-		spotifyApi
-			?.searchArtists(search)
-			.then(response => {
-				setArtists(response.body.artists?.items as ArtistPreviewType[]);
-			})
-			.catch(error => alert(error));
+		spotifyApi?.searchArtists(search).then(response => {
+			setArtists(response.body.artists?.items as ArtistPreviewType[]);
+		});
 	};
 
 	const searchTracks = () => {
-		spotifyApi
-			?.searchTracks(search)
-			.then(response => console.log(response))
-			.catch(error => alert(error));
+		spotifyApi?.searchTracks(search).then(response => {
+			setTracks(response.body.tracks?.items as TrackPreviewType[]);
+		});
 	};
 
 	useEffect(() => {
 		if (search.length === 0) {
 			setAlbums([]);
+			setArtists([]);
+			setTracks([]);
 			return;
 		}
 
@@ -131,6 +136,16 @@ const Search: FC = () => {
 							artist={artist}
 							saved={savedArtistIds.has(artist.id)}
 							rating={ArtistRatings.get(artist.id) ?? 0}
+							showRating
+						/>
+					))}
+				{searchOption === SearchOptions.Tracks &&
+					tracks?.map(track => (
+						<TrackPreview
+							key={track.id}
+							track={track}
+							saved={savedTrackIds.has(track.id)}
+							rating={TrackRatings.get(track.id) ?? 0}
 							showRating
 						/>
 					))}
