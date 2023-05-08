@@ -8,7 +8,7 @@ import {
 	useEffect,
 	useState
 } from 'react';
-import { onSnapshot } from 'firebase/firestore';
+import { onSnapshot, setDoc } from 'firebase/firestore';
 
 import { AlbumPreviewType } from '../utils/AlbumUtils';
 import { albumsDocument } from '../firebase';
@@ -49,6 +49,10 @@ export const SavedAlbumsProvider: FC<PropsWithChildren> = ({ children }) => {
 
 	useEffect(() => {
 		if (!user) return;
+
+		// Initialize document with new user if non-existent
+		setDoc(albumsDocument(user.uid), {}, { merge: true });
+
 		const unsubscribe = onSnapshot(albumsDocument(user.uid), doc => {
 			const data = doc.data();
 			setIds(new Set<string>(data?.ids ?? []));
