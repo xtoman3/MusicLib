@@ -36,8 +36,9 @@ const Artists: FC = () => {
 	const [sortOption, setSortOption] = useState<SortOptions>(
 		SortOptions.Followers
 	);
+	const [ascending, setAscending] = useState<boolean>(true);
 
-	const getSortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) => {
+	const compare = (a: ArtistPreviewType, b: ArtistPreviewType) => {
 		switch (sortOption) {
 			case SortOptions.Followers:
 				return b.followers.total - a.followers.total;
@@ -48,22 +49,40 @@ const Artists: FC = () => {
 		}
 	};
 
+	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
+		ascending ? compare(a, b) : compare(b, a);
+
 	return (
 		<>
-			<Select
-				labelId="select-label"
-				id="select"
-				variant="standard"
-				value={sortOption}
-				onChange={e =>
-					setSortOption(SortOptions[e.target.value as keyof typeof SortOptions])
-				}
-				sx={{ marginLeft: 2 }}
-			>
-				<MenuItem value={SortOptions.Followers}>Followers</MenuItem>
-				<MenuItem value={SortOptions.Popularity}>Popularity</MenuItem>
-				<MenuItem value={SortOptions.Name}>Name</MenuItem>
-			</Select>
+			<Box sx={{ display: 'flex', flexDirection: 'row' }}>
+				<Select
+					labelId="select-label"
+					id="select"
+					variant="standard"
+					value={sortOption}
+					onChange={e =>
+						setSortOption(
+							SortOptions[e.target.value as keyof typeof SortOptions]
+						)
+					}
+					sx={{ marginLeft: 2 }}
+				>
+					<MenuItem value={SortOptions.Followers}>Followers</MenuItem>
+					<MenuItem value={SortOptions.Popularity}>Popularity</MenuItem>
+					<MenuItem value={SortOptions.Name}>Name</MenuItem>
+				</Select>
+				<Select
+					labelId="ascending-label"
+					id="select-order"
+					variant="standard"
+					value={ascending ? 'ascending' : 'descending'}
+					onChange={e => setAscending(e.target.value === 'ascending')}
+					sx={{ marginLeft: 2 }}
+				>
+					<MenuItem value="ascending">Ascending</MenuItem>
+					<MenuItem value="descending">Descending</MenuItem>
+				</Select>
+			</Box>
 			<Box
 				sx={{
 					display: 'flex',
@@ -76,7 +95,7 @@ const Artists: FC = () => {
 			>
 				{artists
 					?.filter(artist => savedArtistIds.has(artist.id))
-					.sort(getSortFunc)
+					.sort(sortFunc)
 					.map(artist => (
 						<ArtistPreview
 							key={artist.id}
