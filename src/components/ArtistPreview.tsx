@@ -92,6 +92,7 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 						'opacity': 1,
 						'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
 						'&:hover': {
+							cursor: 'pointer',
 							backgroundColor: 'primary.dark',
 							opacity: 1
 						}

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import { useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
@@ -16,6 +16,7 @@ const AlbumDetail: FC = () => {
 	const {
 		ratings: { ratings }
 	} = useSavedAlbums();
+	const navigate = useNavigate();
 
 	const {
 		ids: { ids: savedTrackIds }
@@ -69,7 +70,20 @@ const AlbumDetail: FC = () => {
 				/>
 				<Box sx={{ margin: 2, display: 'flex', flexDirection: 'column' }}>
 					<Typography variant="h3">{album.name}</Typography>
-					<Typography variant="h5">by {album.artists[0].name}</Typography>
+					<Typography
+						variant="h5"
+						// @ts-ignore
+						onClick={() => navigate({ to: `/artist/${album.artists[0].id}` })}
+						sx={{
+							'&:hover': {
+								cursor: 'pointer',
+								color: 'primary.main',
+								opacity: 1
+							}
+						}}
+					>
+						by {album.artists[0].name}
+					</Typography>
 					<Box sx={{ marginTop: 2 }}>
 						<Typography variant="body1">
 							Release Date: {album.release_date}

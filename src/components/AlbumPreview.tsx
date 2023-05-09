@@ -61,6 +61,7 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 							'whiteSpace': 'nowrap',
 							'textOverflow': 'ellipsis',
 							'&:hover': {
+								cursor: 'pointer',
 								color: 'primary.main',
 								opacity: 1
 							}
@@ -78,6 +79,7 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 							'opacity': 1,
 							'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
 							'&:hover': {
+								cursor: 'pointer',
 								backgroundColor: 'primary.dark',
 								opacity: 1
 							}
@@ -97,6 +99,7 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 						'whiteSpace': 'nowrap',
 						'textOverflow': 'ellipsis',
 						'&:hover': {
+							cursor: 'pointer',
 							color: 'primary.main',
 							opacity: 1
 						}
