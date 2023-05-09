@@ -74,10 +74,17 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 				<Typography
 					variant="h6"
 					title={artist.name}
+					// @ts-ignore
+					onClick={() => navigate({ to: `/artist/${artist.id}` })}
 					sx={{
-						overflow: 'hidden',
-						whiteSpace: 'nowrap',
-						textOverflow: 'ellipsis'
+						'overflow': 'hidden',
+						'whiteSpace': 'nowrap',
+						'textOverflow': 'ellipsis',
+						'&:hover': {
+							cursor: 'pointer',
+							color: 'primary.main',
+							opacity: 1
+						}
 					}}
 				>
 					{artist.name}
