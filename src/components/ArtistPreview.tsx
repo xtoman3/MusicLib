@@ -8,6 +8,7 @@ import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { artistsDocument } from '../firebase';
 import { ArtistPreviewType } from '../utils/ArtistUtils';
+import getFormattedGenres from '../helpers/getFormattedGenres';
 
 import RatingStrip from './RatingStrip';
 
@@ -34,24 +35,6 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 					ids: arrayRemove(artist.id)
 				});
 		}
-	};
-
-	const getFormattedGenres = (genres: string[]): string => {
-		let result: string;
-		switch (genres.length) {
-			case 0:
-				return 'No genres';
-			case 1:
-				result = 'genre: ';
-				break;
-			default:
-				result = 'genres: ';
-				break;
-		}
-		for (let i = 0; i < genres.length; i++) {
-			result += `${genres[i]}, `;
-		}
-		return result.slice(0, result.length - 2);
 	};
 
 	return (

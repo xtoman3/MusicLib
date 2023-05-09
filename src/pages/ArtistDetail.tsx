@@ -6,6 +6,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import RatingStrip from '../components/RatingStrip';
 import { useSavedArtists } from '../hooks/useSavedArtists';
+import getFormattedGenres from '../helpers/getFormattedGenres';
 
 const ArtistDetail: FC = () => {
 	usePageTitle('Artist');
@@ -65,7 +66,7 @@ const ArtistDetail: FC = () => {
 							Followers: {artist.followers.total}
 						</Typography>
 						<Typography variant="body1">
-							Genres: {artist.genres.toString()}
+							{getFormattedGenres(artist.genres)}
 						</Typography>
 					</Box>
 					<RatingStrip
