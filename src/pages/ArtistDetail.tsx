@@ -1,12 +1,15 @@
 import { useParams } from '@tanstack/react-router';
 import { FC, useEffect, useState } from 'react';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import RatingStrip from '../components/RatingStrip';
 import { useSavedArtists } from '../hooks/useSavedArtists';
 import getFormattedGenres from '../helpers/getFormattedGenres';
+import { TrackPreviewType } from '../utils/TrackUtils';
+import TrackPreview from '../components/TrackPreview';
+import { useSavedTracks } from '../hooks/useSavedTracks';
 
 const ArtistDetail: FC = () => {
 	usePageTitle('Artist');
@@ -16,10 +19,15 @@ const ArtistDetail: FC = () => {
 		ratings: { ratings }
 	} = useSavedArtists();
 
+	const {
+		ids: { ids: savedTrackIds }
+	} = useSavedTracks();
+
 	console.log(useParams());
 	const { artistId } = useParams();
 
 	const [artist, setArtist] = useState<SpotifyApi.SingleArtistResponse>();
+	const [tracks, setTracks] = useState<TrackPreviewType[]>([]);
 
 	useEffect(() => {
 		if (!artistId) {
@@ -28,6 +36,10 @@ const ArtistDetail: FC = () => {
 		}
 		if (!spotifyApi) console.log('Api is null!');
 		spotifyApi?.getArtist(artistId).then(response => setArtist(response.body));
+
+		spotifyApi
+			?.getArtistTopTracks(artistId, 'CZ')
+			.then(response => setTracks(response.body.tracks as TrackPreviewType[]));
 	}, [spotifyApi]);
 
 	if (!artist) {
@@ -76,24 +88,23 @@ const ArtistDetail: FC = () => {
 					/>
 				</Box>
 			</Box>
-			{/* TODO: list of albums?
+			<Typography variant="h4" padding={1}>
+				Top tracks:
+			</Typography>
 			<Grid container spacing={1}>
 				{tracks
 					?.sort((trackA, trackB) => trackB.track_number - trackA.track_number)
-					.map(track => {
-						track.album = album;
-						return track;
-					})
 					.map(track => (
 						<TrackPreview
 							key={track.id}
 							track={track}
+							// saved={false}
 							saved={savedTrackIds.has(track.id)}
 							rating={ratings.get(track.id) ?? 0}
 							showRating
 						/>
 					))}
-			</Grid> */}
+			</Grid>
 		</Paper>
 	);
 };
