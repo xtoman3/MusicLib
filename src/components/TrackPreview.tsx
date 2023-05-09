@@ -82,10 +82,36 @@ const TrackPreview: FC<Props> = ({ track, saved, rating, showRating }) => {
 				<Typography variant="h6" sx={{ marginX: 2, width: '30%' }}>
 					{track.name}
 				</Typography>
-				<Typography variant="body1" sx={{ marginX: 2, width: '20%' }}>
+				<Typography
+					variant="body1"
+					// @ts-ignore
+					onClick={() => navigate({ to: `/album/${track.album?.id}` })}
+					sx={{
+						'marginX': 2,
+						'width': '20%',
+						'&:hover': {
+							cursor: 'pointer',
+							color: 'primary.main',
+							opacity: 1
+						}
+					}}
+				>
 					{track.album?.name ?? 'Unknown'}
 				</Typography>
-				<Typography variant="body1" sx={{ marginX: 2, width: '20%' }}>
+				<Typography
+					variant="body1"
+					// @ts-ignore
+					onClick={() => navigate({ to: `/artist/${track.artists[0].id}` })}
+					sx={{
+						'marginX': 2,
+						'width': '20%',
+						'&:hover': {
+							cursor: 'pointer',
+							color: 'primary.main',
+							opacity: 1
+						}
+					}}
+				>
 					{track.artists[0].name}
 				</Typography>
 				<Box sx={{ flexGrow: 1 }} />
