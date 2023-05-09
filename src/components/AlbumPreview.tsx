@@ -1,7 +1,7 @@
 import { Box, Grid, IconButton, Paper, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 
@@ -90,6 +90,8 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 				<Typography
 					variant="subtitle1"
 					title={album.artists[0].name}
+					// @ts-ignore
+					onClick={() => navigate({ to: `/artist/${album.artists[0].id}` })}
 					sx={{
 						'overflow': 'hidden',
 						'whiteSpace': 'nowrap',
