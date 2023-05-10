@@ -1,48 +1,51 @@
-import React, { FC, useEffect, useState } from 'react';
+import { useParams } from '@tanstack/react-router';
+import { FC, useEffect, useState } from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import { useNavigate, useParams } from '@tanstack/react-router';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
-import { useSavedAlbums } from '../hooks/useSavedAlbums';
 import RatingStrip from '../components/RatingStrip';
-import TrackPreview from '../components/TrackPreview';
+import { useSavedArtists } from '../hooks/useSavedArtists';
+import getFormattedGenres from '../helpers/getFormattedGenres';
 import { TrackPreviewType } from '../utils/TrackUtils';
+import TrackPreview from '../components/TrackPreview';
 import { useSavedTracks } from '../hooks/useSavedTracks';
 
-const AlbumDetail: FC = () => {
-	usePageTitle('Album');
+const ArtistDetail: FC = () => {
+	usePageTitle('Artist');
 	const spotifyApi = useSpotifyApi();
+
 	const {
 		ratings: { ratings }
-	} = useSavedAlbums();
-	const navigate = useNavigate();
+	} = useSavedArtists();
 
 	const {
 		ids: { ids: savedTrackIds }
 	} = useSavedTracks();
 
 	console.log(useParams());
-	const { albumId } = useParams();
+	const { artistId } = useParams();
 
-	const [album, setAlbum] = useState<SpotifyApi.SingleAlbumResponse>();
+	const [artist, setArtist] = useState<SpotifyApi.SingleArtistResponse>();
 	const [tracks, setTracks] = useState<TrackPreviewType[]>([]);
 
 	useEffect(() => {
-		if (!albumId) return;
-		spotifyApi
-			?.getAlbum(albumId)
-			.then(response => setAlbum(response.body))
-			.catch(error => alert(error));
+		if (!artistId) {
+			console.log('2Api is null!');
+			return;
+		}
+		if (!spotifyApi) console.log('Api is null!');
+		spotifyApi?.getArtist(artistId).then(response => setArtist(response.body));
 
 		spotifyApi
-			?.getAlbumTracks(albumId)
-			.then(response => setTracks(response.body.items as TrackPreviewType[]));
+			?.getArtistTopTracks(artistId, 'CZ')
+			.then(response => setTracks(response.body.tracks as TrackPreviewType[]));
 	}, [spotifyApi]);
 
-	if (!album) {
-		return <Typography variant="h4">Album not found</Typography>;
+	if (!artist) {
+		return <Typography variant="h4">Artist not found</Typography>;
 	}
+
 	return (
 		<Paper
 			sx={{
@@ -64,56 +67,38 @@ const AlbumDetail: FC = () => {
 				}}
 			>
 				<img
-					src={album.images[1].url}
-					alt={album.name}
+					src={artist.images[1].url}
+					alt={artist.name}
 					style={{ maxWidth: '100%' }}
 				/>
 				<Box sx={{ margin: 2, display: 'flex', flexDirection: 'column' }}>
-					<Typography variant="h3">{album.name}</Typography>
-					<Typography
-						variant="h5"
-						// @ts-ignore
-						onClick={() => navigate({ to: `/artist/${album.artists[0].id}` })}
-						sx={{
-							'&:hover': {
-								cursor: 'pointer',
-								color: 'primary.main',
-								opacity: 1
-							}
-						}}
-					>
-						by {album.artists[0].name}
-					</Typography>
+					<Typography variant="h3">{artist.name}</Typography>
 					<Box sx={{ marginTop: 2 }}>
 						<Typography variant="body1">
-							Release Date: {album.release_date}
+							Followers: {artist.followers.total}
 						</Typography>
 						<Typography variant="body1">
-							Popularity: {album.popularity}
-						</Typography>
-						<Typography variant="body1">
-							Total Tracks: {album.total_tracks}
+							{getFormattedGenres(artist.genres)}
 						</Typography>
 					</Box>
 					<RatingStrip
-						id={album.id}
-						type="Album"
-						initStars={ratings.get(album.id) ?? 0}
+						id={artist.id}
+						type="Artist"
+						initStars={ratings.get(artist.id) ?? 0}
 					/>
 				</Box>
 			</Box>
-
+			<Typography variant="h4" padding={1}>
+				Top tracks:
+			</Typography>
 			<Grid container spacing={1}>
 				{tracks
 					?.sort((trackA, trackB) => trackB.track_number - trackA.track_number)
-					.map(track => {
-						track.album = album;
-						return track;
-					})
 					.map(track => (
 						<TrackPreview
 							key={track.id}
 							track={track}
+							// saved={false}
 							saved={savedTrackIds.has(track.id)}
 							rating={ratings.get(track.id) ?? 0}
 							showRating
@@ -124,4 +109,4 @@ const AlbumDetail: FC = () => {
 	);
 };
 
-export default AlbumDetail;
+export default ArtistDetail;

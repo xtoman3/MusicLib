@@ -8,6 +8,7 @@ import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { artistsDocument } from '../firebase';
 import { ArtistPreviewType } from '../utils/ArtistUtils';
+import getFormattedGenres from '../helpers/getFormattedGenres';
 
 import RatingStrip from './RatingStrip';
 
@@ -36,24 +37,6 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 		}
 	};
 
-	const getFormattedGenres = (genres: string[]): string => {
-		let result: string;
-		switch (genres.length) {
-			case 0:
-				return 'No genres';
-			case 1:
-				result = 'genre: ';
-				break;
-			default:
-				result = 'genres: ';
-				break;
-		}
-		for (let i = 0; i < genres.length; i++) {
-			result += `${genres[i]}, `;
-		}
-		return result.slice(0, result.length - 2);
-	};
-
 	return (
 		<Paper
 			key={artist.id}
@@ -74,10 +57,17 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 				<Typography
 					variant="h6"
 					title={artist.name}
+					// @ts-ignore
+					onClick={() => navigate({ to: `/artist/${artist.id}` })}
 					sx={{
-						overflow: 'hidden',
-						whiteSpace: 'nowrap',
-						textOverflow: 'ellipsis'
+						'overflow': 'hidden',
+						'whiteSpace': 'nowrap',
+						'textOverflow': 'ellipsis',
+						'&:hover': {
+							cursor: 'pointer',
+							color: 'primary.main',
+							opacity: 1
+						}
 					}}
 				>
 					{artist.name}
@@ -92,6 +82,7 @@ const ArtistPreview: FC<Props> = ({ artist, saved, rating, showRating }) => {
 						'opacity': 1,
 						'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
 						'&:hover': {
+							cursor: 'pointer',
 							backgroundColor: 'primary.dark',
 							opacity: 1
 						}

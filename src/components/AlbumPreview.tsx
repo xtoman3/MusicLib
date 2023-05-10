@@ -1,7 +1,7 @@
 import { Box, Grid, IconButton, Paper, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 
@@ -61,6 +61,7 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 							'whiteSpace': 'nowrap',
 							'textOverflow': 'ellipsis',
 							'&:hover': {
+								cursor: 'pointer',
 								color: 'primary.main',
 								opacity: 1
 							}
@@ -78,6 +79,7 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 							'opacity': 1,
 							'boxShadow': '0px 2px 4px rgba(0, 0, 0, 0.25)',
 							'&:hover': {
+								cursor: 'pointer',
 								backgroundColor: 'primary.dark',
 								opacity: 1
 							}
@@ -90,11 +92,14 @@ const AlbumPreview: FC<Props> = ({ album, saved, rating, showRating }) => {
 				<Typography
 					variant="subtitle1"
 					title={album.artists[0].name}
+					// @ts-ignore
+					onClick={() => navigate({ to: `/artist/${album.artists[0].id}` })}
 					sx={{
 						'overflow': 'hidden',
 						'whiteSpace': 'nowrap',
 						'textOverflow': 'ellipsis',
 						'&:hover': {
+							cursor: 'pointer',
 							color: 'primary.main',
 							opacity: 1
 						}
