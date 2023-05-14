@@ -20,11 +20,15 @@ export type AlbumPreviewType = {
 	popularity?: number;
 };
 
-const attributes = ['name', 'release_date', 'popularity'] as const;
-export type ComparableAttribute = (typeof attributes)[number];
+export const AlbumSortableAttrs = [
+	'name',
+	'release_date',
+	'popularity'
+] as const;
+export type ComparableAlbumAttr = (typeof AlbumSortableAttrs)[number];
 
 const comparisonFunctions: Record<
-	ComparableAttribute,
+	ComparableAlbumAttr,
 	ComparisonFunction<AlbumPreviewType>
 > = {
 	name: (a, b) => a.name.localeCompare(b.name),
@@ -36,7 +40,7 @@ const comparisonFunctions: Record<
 export const compareAlbums = (
 	a: AlbumPreviewType,
 	b: AlbumPreviewType,
-	attribute: ComparableAttribute
+	attribute: ComparableAlbumAttr
 ) => {
 	const comparisonFunction = comparisonFunctions[attribute];
 	if (comparisonFunction) {

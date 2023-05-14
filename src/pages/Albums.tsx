@@ -1,15 +1,23 @@
-import { Box, Grid, MenuItem, Select } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+import { Grid } from '@mui/material';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState
+} from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import {
-	ComparableAttribute,
+	ComparableAlbumAttr,
 	AlbumPreviewType,
-	compareAlbums
+	compareAlbums,
+	AlbumSortableAttrs
 } from '../utils/AlbumUtils';
 import AlbumPreview from '../components/AlbumPreview';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
+import SortSelection from '../components/SortSelection';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
@@ -21,7 +29,7 @@ const Albums: FC = () => {
 		ratings: { ratings }
 	} = useSavedAlbums();
 
-	const [sortOption, setSortOption] = useState<ComparableAttribute>('name');
+	const [sortOption, setSortOption] = useState<ComparableAlbumAttr>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
 	const sortFunc = (a: AlbumPreviewType, b: AlbumPreviewType) =>
@@ -41,31 +49,13 @@ const Albums: FC = () => {
 
 	return (
 		<>
-			<Box sx={{ display: 'flex', flexDirection: 'row' }}>
-				<Select
-					labelId="select-label"
-					id="select"
-					variant="standard"
-					value={sortOption}
-					onChange={e => setSortOption(e.target.value as ComparableAttribute)}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="name">Name</MenuItem>
-					<MenuItem value="release_date">Release date</MenuItem>
-					<MenuItem value="popularity">Popularity</MenuItem>
-				</Select>
-				<Select
-					labelId="ascending-label"
-					id="select-order"
-					variant="standard"
-					value={ascending ? 'ascending' : 'descending'}
-					onChange={e => setAscending(e.target.value === 'ascending')}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="ascending">Ascending</MenuItem>
-					<MenuItem value="descending">Descending</MenuItem>
-				</Select>
-			</Box>
+			<SortSelection
+				sortOptions={AlbumSortableAttrs}
+				selectedOption={sortOption}
+				setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
+				ascending={ascending}
+				setAscending={setAscending}
+			/>
 			<Grid container spacing={1}>
 				{albums
 					?.filter(album => savedAlbumIds.has(album.id))

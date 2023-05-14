@@ -8,7 +8,7 @@ import { arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { artistsDocument } from '../firebase';
 import { ArtistPreviewType } from '../utils/ArtistUtils';
-import getFormattedGenres from '../helpers/getFormattedGenres';
+import getFormattedGenres from '../utils/getFormattedGenres';
 
 import RatingStrip from './RatingStrip';
 
