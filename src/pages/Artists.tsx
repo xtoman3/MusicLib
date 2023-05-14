@@ -3,7 +3,11 @@ import React, { FC, useEffect, useState } from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
-import { ArtistPreviewType } from '../utils/ArtistUtils';
+import {
+	ArtistPreviewType,
+	ComparableAttributes,
+	compareArtists
+} from '../utils/ArtistUtils';
 import ArtistPreview from '../components/ArtistPreview';
 import { useSavedArtists } from '../hooks/useSavedArtists';
 
@@ -27,30 +31,13 @@ const Artists: FC = () => {
 			.catch(error => alert(error));
 	}, [savedArtistIds]);
 
-	enum SortOptions {
-		Followers = 'Followers',
-		Popularity = 'Popularity',
-		Name = 'Name'
-	}
-
-	const [sortOption, setSortOption] = useState<SortOptions>(
-		SortOptions.Followers
-	);
+	const [sortOption, setSortOption] = useState<ComparableAttributes>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
-	const compare = (a: ArtistPreviewType, b: ArtistPreviewType) => {
-		switch (sortOption) {
-			case SortOptions.Followers:
-				return b.followers.total - a.followers.total;
-			case SortOptions.Popularity:
-				return (b.popularity ?? 0) - (a.popularity ?? 0);
-			case SortOptions.Name:
-				return a.name.localeCompare(b.name);
-		}
-	};
-
 	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
-		ascending ? compare(a, b) : compare(b, a);
+		ascending
+			? compareArtists(a, b, sortOption)
+			: compareArtists(b, a, sortOption);
 
 	return (
 		<>
@@ -60,16 +47,12 @@ const Artists: FC = () => {
 					id="select"
 					variant="standard"
 					value={sortOption}
-					onChange={e =>
-						setSortOption(
-							SortOptions[e.target.value as keyof typeof SortOptions]
-						)
-					}
+					onChange={e => setSortOption(e.target.value as ComparableAttributes)}
 					sx={{ marginLeft: 2 }}
 				>
-					<MenuItem value={SortOptions.Followers}>Followers</MenuItem>
-					<MenuItem value={SortOptions.Popularity}>Popularity</MenuItem>
-					<MenuItem value={SortOptions.Name}>Name</MenuItem>
+					<MenuItem value="name">Followers</MenuItem>
+					<MenuItem value="followers">Popularity</MenuItem>
+					<MenuItem value="popularity">Name</MenuItem>
 				</Select>
 				<Select
 					labelId="ascending-label"
