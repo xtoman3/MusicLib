@@ -20,11 +20,16 @@ export type TrackPreviewType = {
 	duration_ms: number;
 };
 
-const attributes = ['name', 'duration', 'popularity', 'track_number'] as const;
-export type ComparableAttribute = (typeof attributes)[number];
+export const TrackSortableAttrs = [
+	'name',
+	'duration',
+	'popularity',
+	'track_number'
+] as const;
+export type ComparableTrackAttrs = (typeof TrackSortableAttrs)[number];
 
 const comparisonFunctions: Record<
-	ComparableAttribute,
+	ComparableTrackAttrs,
 	ComparisonFunction<TrackPreviewType>
 > = {
 	name: (a, b) => a.name.localeCompare(b.name),
@@ -36,7 +41,7 @@ const comparisonFunctions: Record<
 export const compareTracks = (
 	a: TrackPreviewType,
 	b: TrackPreviewType,
-	attribute: ComparableAttribute
+	attribute: ComparableTrackAttrs
 ) => {
 	const comparisonFunction = comparisonFunctions[attribute];
 	if (comparisonFunction) {

@@ -1,15 +1,23 @@
-import { Box, MenuItem, Select } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+import { Box } from '@mui/material';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState
+} from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import {
 	ArtistPreviewType,
-	ComparableAttribute,
-	compareArtists
+	ComparableArtistAttr,
+	compareArtists,
+	ArtistSortableAttrs
 } from '../utils/ArtistUtils';
 import ArtistPreview from '../components/ArtistPreview';
 import { useSavedArtists } from '../hooks/useSavedArtists';
+import SortSelection from '../components/SortSelection';
 
 const Artists: FC = () => {
 	usePageTitle('Artists');
@@ -21,6 +29,14 @@ const Artists: FC = () => {
 		ratings: { ratings }
 	} = useSavedArtists();
 
+	const [sortOption, setSortOption] = useState<ComparableArtistAttr>('name');
+	const [ascending, setAscending] = useState<boolean>(true);
+
+	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
+		ascending
+			? compareArtists(a, b, sortOption)
+			: compareArtists(b, a, sortOption);
+
 	useEffect(() => {
 		if (!spotifyApi || savedArtistIds.size === 0) return;
 		spotifyApi
@@ -31,41 +47,15 @@ const Artists: FC = () => {
 			.catch(error => alert(error));
 	}, [savedArtistIds]);
 
-	const [sortOption, setSortOption] = useState<ComparableAttribute>('name');
-	const [ascending, setAscending] = useState<boolean>(true);
-
-	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
-		ascending
-			? compareArtists(a, b, sortOption)
-			: compareArtists(b, a, sortOption);
-
 	return (
 		<>
-			<Box sx={{ display: 'flex', flexDirection: 'row' }}>
-				<Select
-					labelId="select-label"
-					id="select"
-					variant="standard"
-					value={sortOption}
-					onChange={e => setSortOption(e.target.value as ComparableAttribute)}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="name">Followers</MenuItem>
-					<MenuItem value="followers">Popularity</MenuItem>
-					<MenuItem value="popularity">Name</MenuItem>
-				</Select>
-				<Select
-					labelId="ascending-label"
-					id="select-order"
-					variant="standard"
-					value={ascending ? 'ascending' : 'descending'}
-					onChange={e => setAscending(e.target.value === 'ascending')}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="ascending">Ascending</MenuItem>
-					<MenuItem value="descending">Descending</MenuItem>
-				</Select>
-			</Box>
+			<SortSelection
+				sortOptions={ArtistSortableAttrs}
+				selectedOption={sortOption}
+				setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
+				ascending={ascending}
+				setAscending={setAscending}
+			/>
 			<Box
 				sx={{
 					display: 'flex',

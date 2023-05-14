@@ -1,16 +1,23 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Box, Grid, MenuItem, Select } from '@mui/material';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState
+} from 'react';
+import { Grid } from '@mui/material';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import { useSavedTracks } from '../hooks/useSavedTracks';
 import {
-	ComparableAttribute,
+	ComparableTrackAttrs,
 	compareTracks,
-	TrackPreviewType
+	TrackPreviewType,
+	TrackSortableAttrs
 } from '../utils/TrackUtils';
 import TrackPreview from '../components/TrackPreview';
-import { ComparisonFunction } from '../utils/GeneralUtils';
+import SortSelection from '../components/SortSelection';
 
 const Tracks: FC = () => {
 	usePageTitle('Tracks');
@@ -22,7 +29,7 @@ const Tracks: FC = () => {
 		ratings: { ratings }
 	} = useSavedTracks();
 
-	const [sortOption, setSortOption] = useState<ComparableAttribute>('name');
+	const [sortOption, setSortOption] = useState<ComparableTrackAttrs>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
 	const sortFunc = (a: TrackPreviewType, b: TrackPreviewType) =>
@@ -42,31 +49,13 @@ const Tracks: FC = () => {
 
 	return (
 		<>
-			<Box sx={{ display: 'flex', flexDirection: 'row' }}>
-				<Select
-					labelId="select-label"
-					id="select"
-					variant="standard"
-					value={sortOption}
-					onChange={e => setSortOption(e.target.value as ComparableAttribute)}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="name">Name</MenuItem>
-					<MenuItem value="duration">Duration</MenuItem>
-					<MenuItem value="popularity">Popularity</MenuItem>
-				</Select>
-				<Select
-					labelId="ascending-label"
-					id="select-order"
-					variant="standard"
-					value={ascending ? 'ascending' : 'descending'}
-					onChange={e => setAscending(e.target.value === 'ascending')}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="ascending">Ascending</MenuItem>
-					<MenuItem value="descending">Descending</MenuItem>
-				</Select>
-			</Box>
+			<SortSelection
+				sortOptions={TrackSortableAttrs}
+				selectedOption={sortOption}
+				setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
+				ascending={ascending}
+				setAscending={setAscending}
+			/>
 			<Grid container spacing={1}>
 				{tracks
 					?.filter(track => savedTrackIds.has(track.id))

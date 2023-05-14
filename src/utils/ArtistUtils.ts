@@ -18,11 +18,11 @@ export type ArtistPreviewType = {
 	popularity?: number;
 };
 
-const attributes = ['name', 'followers', 'popularity'] as const;
-export type ComparableAttribute = (typeof attributes)[number];
+export const ArtistSortableAttrs = ['name', 'followers', 'popularity'] as const;
+export type ComparableArtistAttr = (typeof ArtistSortableAttrs)[number];
 
 const comparisonFunctions: Record<
-	ComparableAttribute,
+	ComparableArtistAttr,
 	ComparisonFunction<ArtistPreviewType>
 > = {
 	name: (a, b) => a.name.localeCompare(b.name),
@@ -33,7 +33,7 @@ const comparisonFunctions: Record<
 export const compareArtists = (
 	a: ArtistPreviewType,
 	b: ArtistPreviewType,
-	attribute: ComparableAttribute
+	attribute: ComparableArtistAttr
 ) => {
 	const comparisonFunction = comparisonFunctions[attribute];
 	if (comparisonFunction) {
