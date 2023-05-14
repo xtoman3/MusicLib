@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import React, {
 	Dispatch,
 	FC,
@@ -18,6 +18,8 @@ import {
 import AlbumPreview from '../components/AlbumPreview';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
 import SortSelection from '../components/SortSelection';
+import PageSizeSelector from '../components/PageSizeSelector';
+import PageSelector from '../components/PageSelector';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
@@ -32,6 +34,9 @@ const Albums: FC = () => {
 	const [sortOption, setSortOption] = useState<ComparableAlbumAttr>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
+	const [pageSize, setPageSize] = useState<number>(20);
+	const [page, setPage] = useState<number>(0);
+
 	const sortFunc = (a: AlbumPreviewType, b: AlbumPreviewType) =>
 		ascending
 			? compareAlbums(a, b, sortOption)
@@ -40,21 +45,37 @@ const Albums: FC = () => {
 	useEffect(() => {
 		if (!spotifyApi || savedAlbumIds.size === 0) return;
 		spotifyApi
-			.getAlbums([...savedAlbumIds])
+			.getAlbums(
+				[...savedAlbumIds].slice(page * pageSize, (page + 1) * pageSize)
+			)
 			.then(response => {
 				setAlbums(response.body.albums as AlbumPreviewType[]);
 			})
 			.catch(error => alert(error));
-	}, [savedAlbumIds]);
+	}, [savedAlbumIds, pageSize, page]);
 
 	return (
 		<>
-			<SortSelection
-				sortOptions={AlbumSortableAttrs}
-				selectedOption={sortOption}
-				setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
-				ascending={ascending}
-				setAscending={setAscending}
+			<Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+				<SortSelection
+					sortOptions={AlbumSortableAttrs}
+					selectedOption={sortOption}
+					setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
+					ascending={ascending}
+					setAscending={setAscending}
+				/>
+				<Box sx={{ flexGrow: 1 }} />
+				<PageSizeSelector
+					pageSize={pageSize}
+					setPageSize={setPageSize}
+					setPage={setPage}
+				/>
+			</Box>
+			<PageSelector
+				page={page}
+				pageSize={pageSize}
+				savedAlbumsSize={savedAlbumIds.size}
+				setPage={setPage}
 			/>
 			<Grid container spacing={1}>
 				{albums

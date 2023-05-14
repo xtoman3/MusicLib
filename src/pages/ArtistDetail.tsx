@@ -23,18 +23,13 @@ const ArtistDetail: FC = () => {
 		ids: { ids: savedTrackIds }
 	} = useSavedTracks();
 
-	console.log(useParams());
 	const { artistId } = useParams();
 
 	const [artist, setArtist] = useState<SpotifyApi.SingleArtistResponse>();
 	const [tracks, setTracks] = useState<TrackPreviewType[]>([]);
 
 	useEffect(() => {
-		if (!artistId) {
-			console.log('2Api is null!');
-			return;
-		}
-		if (!spotifyApi) console.log('Api is null!');
+		if (!artistId) return;
 		spotifyApi?.getArtist(artistId).then(response => setArtist(response.body));
 
 		spotifyApi

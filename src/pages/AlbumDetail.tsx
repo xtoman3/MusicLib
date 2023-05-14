@@ -22,7 +22,6 @@ const AlbumDetail: FC = () => {
 		ids: { ids: savedTrackIds }
 	} = useSavedTracks();
 
-	console.log(useParams());
 	const { albumId } = useParams();
 
 	const [album, setAlbum] = useState<SpotifyApi.SingleAlbumResponse>();

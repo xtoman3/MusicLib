@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { Box, MenuItem, Select } from '@mui/material';
+import { Box, MenuItem, Select, Typography } from '@mui/material';
 
 type Props = {
 	sortOptions: readonly string[];
@@ -26,6 +26,9 @@ const SortSelection: FC<Props> = ({
 	setAscending
 }) => (
 	<Box sx={{ display: 'flex', flexDirection: 'row' }}>
+		<Typography sx={{ display: 'flex', alignItems: 'center' }}>
+			Order by:
+		</Typography>
 		<Select
 			labelId="select-label"
 			id="select"
