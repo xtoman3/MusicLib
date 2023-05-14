@@ -20,6 +20,8 @@ import {
 import AlbumPreview from '../components/AlbumPreview';
 import { useSavedAlbums } from '../hooks/useSavedAlbums';
 import SortSelection from '../components/SortSelection';
+import PageSizeSelector from '../components/PageSizeSelector';
+import PageSelector from '../components/PageSelector';
 
 const Albums: FC = () => {
 	usePageTitle('Albums');
@@ -65,38 +67,18 @@ const Albums: FC = () => {
 					setAscending={setAscending}
 				/>
 				<Box sx={{ flexGrow: 1 }} />
-				<Box sx={{ display: 'flex', flexDirection: 'row' }}>
-					<Typography sx={{ display: 'flex', alignItems: 'center' }}>
-						Page size:
-					</Typography>
-					<Select
-						labelId="select-label"
-						id="select"
-						variant="standard"
-						value={pageSize}
-						onChange={e => {
-							setPageSize(Number(e.target.value));
-							setPage(0);
-						}}
-						sx={{ marginLeft: 2 }}
-					>
-						<MenuItem value={10}>10</MenuItem>
-						<MenuItem value={20}>20</MenuItem>
-					</Select>
-				</Box>
+				<PageSizeSelector
+					pageSize={pageSize}
+					setPageSize={setPageSize}
+					setPage={setPage}
+				/>
 			</Box>
-			<Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-				<Button onClick={() => setPage(prev => prev - 1)} disabled={page <= 0}>
-					<ChevronLeftIcon />
-				</Button>
-				<Box sx={{ flexGrow: 1 }} />
-				<Button
-					onClick={() => setPage(prev => prev + 1)}
-					disabled={page * pageSize >= savedAlbumIds.size}
-				>
-					<ChevronRightIcon />
-				</Button>
-			</Box>
+			<PageSelector
+				page={page}
+				pageSize={pageSize}
+				savedAlbumsSize={savedAlbumIds.size}
+				setPage={setPage}
+			/>
 			<Grid container spacing={1}>
 				{albums
 					?.filter(album => savedAlbumIds.has(album.id))
