@@ -6,7 +6,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import RatingStrip from '../components/RatingStrip';
 import { useSavedArtists } from '../hooks/useSavedArtists';
-import getFormattedGenres from '../helpers/getFormattedGenres';
+import getFormattedGenres from '../utils/getFormattedGenres';
 import { TrackPreviewType } from '../utils/TrackUtils';
 import TrackPreview from '../components/TrackPreview';
 import { useSavedTracks } from '../hooks/useSavedTracks';
