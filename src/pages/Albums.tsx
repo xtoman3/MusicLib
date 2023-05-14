@@ -1,4 +1,4 @@
-import { Box, Button, Grid, MenuItem, Select, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import React, {
 	Dispatch,
 	FC,
@@ -6,8 +6,6 @@ import React, {
 	useEffect,
 	useState
 } from 'react';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';

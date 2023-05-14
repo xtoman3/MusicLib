@@ -5,7 +5,7 @@ import React, {
 	useEffect,
 	useState
 } from 'react';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
@@ -18,6 +18,8 @@ import {
 } from '../utils/TrackUtils';
 import TrackPreview from '../components/TrackPreview';
 import SortSelection from '../components/SortSelection';
+import PageSizeSelector from '../components/PageSizeSelector';
+import PageSelector from '../components/PageSelector';
 
 const Tracks: FC = () => {
 	usePageTitle('Tracks');
@@ -32,6 +34,9 @@ const Tracks: FC = () => {
 	const [sortOption, setSortOption] = useState<ComparableTrackAttrs>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
+	const [pageSize, setPageSize] = useState<number>(20);
+	const [page, setPage] = useState<number>(0);
+
 	const sortFunc = (a: TrackPreviewType, b: TrackPreviewType) =>
 		ascending
 			? compareTracks(a, b, sortOption)
@@ -40,21 +45,37 @@ const Tracks: FC = () => {
 	useEffect(() => {
 		if (!spotifyApi || savedTrackIds.size === 0) return;
 		spotifyApi
-			.getTracks([...savedTrackIds])
+			.getTracks(
+				[...savedTrackIds].slice(page * pageSize, (page + 1) * pageSize)
+			)
 			.then(response => {
 				setTracks(response.body.tracks as TrackPreviewType[]);
 			})
 			.catch(error => alert(error));
-	}, [savedTrackIds]);
+	}, [savedTrackIds, pageSize, page]);
 
 	return (
 		<>
-			<SortSelection
-				sortOptions={TrackSortableAttrs}
-				selectedOption={sortOption}
-				setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
-				ascending={ascending}
-				setAscending={setAscending}
+			<Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+				<SortSelection
+					sortOptions={TrackSortableAttrs}
+					selectedOption={sortOption}
+					setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
+					ascending={ascending}
+					setAscending={setAscending}
+				/>
+				<Box sx={{ flexGrow: 1 }} />
+				<PageSizeSelector
+					pageSize={pageSize}
+					setPageSize={setPageSize}
+					setPage={setPage}
+				/>
+			</Box>
+			<PageSelector
+				page={page}
+				pageSize={pageSize}
+				savedAlbumsSize={savedTrackIds.size}
+				setPage={setPage}
 			/>
 			<Grid container spacing={1}>
 				{tracks
