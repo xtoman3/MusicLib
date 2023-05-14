@@ -5,7 +5,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import {
 	ArtistPreviewType,
-	ComparableAttributes,
+	ComparableAttribute,
 	compareArtists
 } from '../utils/ArtistUtils';
 import ArtistPreview from '../components/ArtistPreview';
@@ -31,7 +31,7 @@ const Artists: FC = () => {
 			.catch(error => alert(error));
 	}, [savedArtistIds]);
 
-	const [sortOption, setSortOption] = useState<ComparableAttributes>('name');
+	const [sortOption, setSortOption] = useState<ComparableAttribute>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
 	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
@@ -47,7 +47,7 @@ const Artists: FC = () => {
 					id="select"
 					variant="standard"
 					value={sortOption}
-					onChange={e => setSortOption(e.target.value as ComparableAttributes)}
+					onChange={e => setSortOption(e.target.value as ComparableAttribute)}
 					sx={{ marginLeft: 2 }}
 				>
 					<MenuItem value="name">Followers</MenuItem>

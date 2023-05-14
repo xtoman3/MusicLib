@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import {
-	ComparableAttributes,
+	ComparableAttribute,
 	AlbumPreviewType,
 	compareAlbums
 } from '../utils/AlbumUtils';
@@ -21,7 +21,7 @@ const Albums: FC = () => {
 		ratings: { ratings }
 	} = useSavedAlbums();
 
-	const [sortOption, setSortOption] = useState<ComparableAttributes>('name');
+	const [sortOption, setSortOption] = useState<ComparableAttribute>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
 	const sortFunc = (a: AlbumPreviewType, b: AlbumPreviewType) =>
@@ -47,7 +47,7 @@ const Albums: FC = () => {
 					id="select"
 					variant="standard"
 					value={sortOption}
-					onChange={e => setSortOption(e.target.value as ComparableAttributes)}
+					onChange={e => setSortOption(e.target.value as ComparableAttribute)}
 					sx={{ marginLeft: 2 }}
 				>
 					<MenuItem value="name">Name</MenuItem>

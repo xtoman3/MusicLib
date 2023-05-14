@@ -4,14 +4,13 @@ import { Box, Grid, MenuItem, Select } from '@mui/material';
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
 import { useSavedTracks } from '../hooks/useSavedTracks';
-import { TrackPreviewType } from '../utils/TrackUtils';
+import {
+	ComparableAttribute,
+	compareTracks,
+	TrackPreviewType
+} from '../utils/TrackUtils';
 import TrackPreview from '../components/TrackPreview';
-
-enum SortOptions {
-	Name = 'Name',
-	Duration = 'Duration',
-	Popularity = 'Popularity'
-}
+import { ComparisonFunction } from '../utils/GeneralUtils';
 
 const Tracks: FC = () => {
 	usePageTitle('Tracks');
@@ -23,22 +22,13 @@ const Tracks: FC = () => {
 		ratings: { ratings }
 	} = useSavedTracks();
 
-	const [sortOption, setSortOption] = useState<SortOptions>(SortOptions.Name);
+	const [sortOption, setSortOption] = useState<ComparableAttribute>('name');
 	const [ascending, setAscending] = useState<boolean>(true);
 
-	const compare = (a: TrackPreviewType, b: TrackPreviewType) => {
-		switch (sortOption) {
-			case SortOptions.Name:
-				return a.name.localeCompare(b.name);
-			case SortOptions.Duration:
-				return b.duration_ms - a.duration_ms;
-			case SortOptions.Popularity:
-				return (b.popularity ?? 0) - (a.popularity ?? 0);
-		}
-	};
-
 	const sortFunc = (a: TrackPreviewType, b: TrackPreviewType) =>
-		ascending ? compare(a, b) : compare(b, a);
+		ascending
+			? compareTracks(a, b, sortOption)
+			: compareTracks(b, a, sortOption);
 
 	useEffect(() => {
 		if (!spotifyApi || savedTrackIds.size === 0) return;
@@ -58,16 +48,12 @@ const Tracks: FC = () => {
 					id="select"
 					variant="standard"
 					value={sortOption}
-					onChange={e =>
-						setSortOption(
-							SortOptions[e.target.value as keyof typeof SortOptions]
-						)
-					}
+					onChange={e => setSortOption(e.target.value as ComparableAttribute)}
 					sx={{ marginLeft: 2 }}
 				>
-					<MenuItem value={SortOptions.Name}>Name</MenuItem>
-					<MenuItem value={SortOptions.Duration}>Duration</MenuItem>
-					<MenuItem value={SortOptions.Popularity}>Popularity</MenuItem>
+					<MenuItem value="name">Name</MenuItem>
+					<MenuItem value="duration">Duration</MenuItem>
+					<MenuItem value="popularity">Popularity</MenuItem>
 				</Select>
 				<Select
 					labelId="ascending-label"
