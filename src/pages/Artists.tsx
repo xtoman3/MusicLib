@@ -1,11 +1,25 @@
-import { Box, MenuItem, Select } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+import { Box } from '@mui/material';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState
+} from 'react';
 
 import usePageTitle from '../hooks/usePageTitle';
 import { useSpotifyApi } from '../hooks/useSpotifyApi';
-import { ArtistPreviewType } from '../utils/ArtistUtils';
+import {
+	ArtistPreviewType,
+	ComparableArtistAttr,
+	compareArtists,
+	ArtistSortableAttrs
+} from '../utils/ArtistUtils';
 import ArtistPreview from '../components/ArtistPreview';
 import { useSavedArtists } from '../hooks/useSavedArtists';
+import SortSelection from '../components/SortSelection';
+import PageSizeSelector from '../components/PageSizeSelector';
+import PageSelector from '../components/PageSelector';
 
 const Artists: FC = () => {
 	usePageTitle('Artists');
@@ -17,72 +31,52 @@ const Artists: FC = () => {
 		ratings: { ratings }
 	} = useSavedArtists();
 
+	const [sortOption, setSortOption] = useState<ComparableArtistAttr>('name');
+	const [ascending, setAscending] = useState<boolean>(true);
+
+	const [pageSize, setPageSize] = useState<number>(20);
+	const [page, setPage] = useState<number>(0);
+
+	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
+		ascending
+			? compareArtists(a, b, sortOption)
+			: compareArtists(b, a, sortOption);
+
 	useEffect(() => {
 		if (!spotifyApi || savedArtistIds.size === 0) return;
 		spotifyApi
-			.getArtists([...savedArtistIds])
+			.getArtists(
+				[...savedArtistIds].slice(page * pageSize, (page + 1) * pageSize)
+			)
 			.then(response => {
 				setArtists(response.body.artists as unknown as ArtistPreviewType[]);
 			})
 			.catch(error => alert(error));
-	}, [savedArtistIds]);
-
-	enum SortOptions {
-		Followers = 'Followers',
-		Popularity = 'Popularity',
-		Name = 'Name'
-	}
-
-	const [sortOption, setSortOption] = useState<SortOptions>(
-		SortOptions.Followers
-	);
-	const [ascending, setAscending] = useState<boolean>(true);
-
-	const compare = (a: ArtistPreviewType, b: ArtistPreviewType) => {
-		switch (sortOption) {
-			case SortOptions.Followers:
-				return b.followers.total - a.followers.total;
-			case SortOptions.Popularity:
-				return (b.popularity ?? 0) - (a.popularity ?? 0);
-			case SortOptions.Name:
-				return a.name.localeCompare(b.name);
-		}
-	};
-
-	const sortFunc = (a: ArtistPreviewType, b: ArtistPreviewType) =>
-		ascending ? compare(a, b) : compare(b, a);
+	}, [savedArtistIds, pageSize, page]);
 
 	return (
 		<>
-			<Box sx={{ display: 'flex', flexDirection: 'row' }}>
-				<Select
-					labelId="select-label"
-					id="select"
-					variant="standard"
-					value={sortOption}
-					onChange={e =>
-						setSortOption(
-							SortOptions[e.target.value as keyof typeof SortOptions]
-						)
-					}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value={SortOptions.Followers}>Followers</MenuItem>
-					<MenuItem value={SortOptions.Popularity}>Popularity</MenuItem>
-					<MenuItem value={SortOptions.Name}>Name</MenuItem>
-				</Select>
-				<Select
-					labelId="ascending-label"
-					id="select-order"
-					variant="standard"
-					value={ascending ? 'ascending' : 'descending'}
-					onChange={e => setAscending(e.target.value === 'ascending')}
-					sx={{ marginLeft: 2 }}
-				>
-					<MenuItem value="ascending">Ascending</MenuItem>
-					<MenuItem value="descending">Descending</MenuItem>
-				</Select>
+			<Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+				<SortSelection
+					sortOptions={ArtistSortableAttrs}
+					selectedOption={sortOption}
+					setSelectedOption={setSortOption as Dispatch<SetStateAction<string>>}
+					ascending={ascending}
+					setAscending={setAscending}
+				/>
+				<Box sx={{ flexGrow: 1 }} />
+				<PageSizeSelector
+					pageSize={pageSize}
+					setPageSize={setPageSize}
+					setPage={setPage}
+				/>
 			</Box>
+			<PageSelector
+				page={page}
+				pageSize={pageSize}
+				savedAlbumsSize={savedArtistIds.size}
+				setPage={setPage}
+			/>
 			<Box
 				sx={{
 					display: 'flex',
